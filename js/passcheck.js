@@ -20,7 +20,10 @@ $(document).ready(function(){
 		e.preventDefault();
 		$('.content').addClass('slide-out');
 		setTimeout(function(){
-			$('.content').removeClass('slide-out');
-		}, 2000);
+			$('.content').addClass('slide-in').removeClass('slide-out');
+		}, 600);
+		setTimeout(function(){
+			$('.content').removeClass('slide-in');
+		}, 1000);
 	});
 });
