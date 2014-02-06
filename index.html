@@ -1,8 +1,17 @@
 <html>
 	<head>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+		<script src="/js/passcheck.js"></script>
 		<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/yeti/bootstrap.min.css" rel="stylesheet">
 		<style>
+			.content{
+				-webkit-transition:all 1.0s ease-in-out;
+				opacity: 1;
+			}
+			.slide-out{
+				-webkit-transform:translate3d(-500%, 0, 0);
+				opacity: 0;
+			}
 			.form{
 				float: center;
 				clear: both;
@@ -49,7 +58,7 @@
 			<div class="title">
 				<h3>Check Yo Password</h3>
 			</div>
-			<div class="container-fluid">
+			<div class="container-fluid content">
 				<div class="row">
 					<div class="col-md-2"></div>
 					<div class="col-md-8">

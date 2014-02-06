@@ -17,6 +17,10 @@ var Passcheck = (function(){
 $(document).ready(function(){
 	var $this = $(this);
 	$this.on('click', '.btn', function(e){
-		Passcheck.checkPassword(e);
+		e.preventDefault();
+		$('.content').addClass('slide-out');
+		setTimeout(function(){
+			$('.content').removeClass('slide-out');
+		}, 2000);
 	});
 });
