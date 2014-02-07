@@ -2,10 +2,11 @@
 	<head>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 		<script src="/js/passcheck.js"></script>
+		<script src="/js/zxcvbn.js"></script>
 		<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/yeti/bootstrap.min.css" rel="stylesheet">
 		<style>
 			.content{
-				-webkit-transition:all 1.0s ease-in-out;
+				-webkit-transition:all .5s ease-in-out;
 				opacity: 1;
 			}
 			.slide-out{
@@ -29,6 +30,28 @@
 				text-align: center;
 			}
 		</style>
+		<script>
+			$(document).ready(function(){
+				var $this = $(this),
+					result = {},
+					$entropy = $('#entropy'),
+					$score = $('#score');
+					
+					$this.on('click', '.btn', function(e){
+						e.preventDefault();
+						result = zxcvbn($('#pw').val());
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$entropy.html('Entropy: ' + result.entropy);
+							$score.html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+						}, 1000);
+					});
+			});
+		</script>
 	</head>
 	<body>
 		<header>
@@ -70,6 +93,13 @@
 						    <input type="password" class="form-control" id="pw" placeholder="Password" style="min-width:50%;">
 							<button type="submit" class="btn btn-primary btn-lg padding-top clearfix center-block">How's My Password?</button>
 						</form>
+					</div>
+				</div>
+				<div class="row" id="results">
+					<div class="col-md-2"></div>
+					<div class="col-md-8">
+						<h3 id="entropy"></h3>
+						<h3 id="score"></h3>
 					</div>
 				</div>
 			</div>
