@@ -6,7 +6,9 @@ Simple implementation of an algorithm to check the entropy of a supplied passwor
 
 Goals:
 
-- Build lists 
+- Calculate score using zxcvbn (this is awesome)
+- Prompt user for game parameters
+- Animate canvas with black hats, social media icons (transparent canvas & divs vs. all in canvas?)
 
 
 References:
