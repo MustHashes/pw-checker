@@ -31,11 +31,13 @@
 			}
 		</style>
 		<script>
+			var Mhash = {};
+			$(window).load(function(){
+				Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
+			});
 			$(document).ready(function(){
 				var $this = $(this),
-					result = {},
-					$entropy = $('#entropy'),
-					$score = $('#score');
+					result = {};
 					
 					$this.on('click', '.btn', function(e){
 						e.preventDefault();
@@ -43,12 +45,13 @@
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$entropy.html('Entropy: ' + result.entropy);
-							$score.html('Score: ' + result.score);
+							$('.content').html(Mhash.results);
+							$('#entropy').html('Entropy: ' + result.entropy);
+							$('#score').html('Score: ' + result.score);
 						}, 600);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
-						}, 1000);
+						}, 950);
 					});
 			});
 		</script>
@@ -93,13 +96,6 @@
 						    <input type="password" class="form-control" id="pw" placeholder="Password" style="min-width:50%;">
 							<button type="submit" class="btn btn-primary btn-lg padding-top clearfix center-block">How's My Password?</button>
 						</form>
-					</div>
-				</div>
-				<div class="row" id="results">
-					<div class="col-md-2"></div>
-					<div class="col-md-8">
-						<h3 id="entropy"></h3>
-						<h3 id="score"></h3>
 					</div>
 				</div>
 			</div>
