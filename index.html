@@ -68,19 +68,16 @@
 		</style>
 		<script>
 			var Mhash = {};
-			$(window).load(function(){
-				Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
-				Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
-				Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
-				Mhash.params;
-				Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
-				Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
-			});
+			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
+			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
+			Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
+			Mhash.params;
+			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
+			Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
+			
 			$(document).ready(function(){
 				var $this = $(this),
 					result = {};
-					
-
 					$this.on('click', '.check-button', function(e){
 						e.preventDefault();
 						result = zxcvbn($('#pw').val());
@@ -88,10 +85,10 @@
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.start);
+							$('.title').append(Mhash.lock);
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
-						}, 600);
-						$('.title').append(Mhash.lock);
+						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
@@ -100,6 +97,7 @@
 					.on('click', '.start', function(e){
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
+							$('.lock').css('display', 'none');
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.canvas);
 							//$('#entropy').html('Entropy: ' + result.entropy);
@@ -108,9 +106,9 @@
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
-							setTimeout(function(){
-							$this.trigger('gameOver');
-						},2000);
+								setTimeout(function(){
+									$this.trigger('gameOver');
+								},2000);
 						}, 1250);
 						
 					})
@@ -121,6 +119,7 @@
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.lock').css('display', '');
 							$('.content').html(Mhash.over);
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
@@ -136,6 +135,8 @@
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.start);
+							$('.lock').css('display', '');
+							console.log(Mhash.lock);
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
 						}, 600);
