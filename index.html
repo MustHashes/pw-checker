@@ -6,6 +6,14 @@
 		<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/yeti/bootstrap.min.css" rel="stylesheet">
 		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 		<style>
+
+
+			@media screen and (max-width: 500px){
+				.start, .rules, .quit{
+				border-radius: 30px;
+				min-width: 80%;
+				}
+			}
 			.canvas-container{
 				background: transparent;
 				opacity: .5;
@@ -13,7 +21,6 @@
 				min-height: 60%;
 				max-width: 80%;
 				margin: 0 auto;
-				position: static;
 				clear: both;
 				float: center;
 			}
@@ -33,12 +40,16 @@
 				float: center;
 				clear: both;
 			}
+			.lock{
+				font-size: 4em;
+				color: #FFAA06;
+			}
 			.padding-top{
 				margin-top: 10px;
 			}
-			.start, .rules{
+			.start, .rules, .quit{
 				border-radius: 30px;
-				min-width: 50%;
+				min-width: 40%;
 			}
 			.target{
 				margin-right: 5%;
@@ -61,13 +72,15 @@
 				Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
 				Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 				Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
-				Mhash.params,
-				Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn start btn-danger center-block padding-top'>Quit</button></div></div>");
+				Mhash.params;
+				Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
+				Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
 			});
 			$(document).ready(function(){
 				var $this = $(this),
 					result = {};
 					
+
 					$this.on('click', '.check-button', function(e){
 						e.preventDefault();
 						result = zxcvbn($('#pw').val());
@@ -78,6 +91,7 @@
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
 						}, 600);
+						$('.title').append(Mhash.lock);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
@@ -100,7 +114,7 @@
 						}, 1250);
 						
 					})
-					.on('click', 'rules', function(e){
+					.on('click', '.rules', function(e){
 
 					})
 					.on('gameOver', function(e){
@@ -115,6 +129,19 @@
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
 						}, 1250)
+					})
+					.on('click', '.quit', function(e){
+						e.preventDefault();
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.start);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+						}, 1250);
 					});
 			});
 		</script>
@@ -137,8 +164,6 @@
 		    <!-- Collect the nav links, forms, and other content for toggling -->
 		    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 		      <ul class="nav navbar-nav">
-		        <li class="active"><a href="#">Link</a></li>
-		        <li><a href="#">Link</a></li>
 		      </ul>
 		      <ul class="nav navbar-nav navbar-right">
 		        <li style="color: white;"><h4>Team Must Hashes</h4></li>
