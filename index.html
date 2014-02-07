@@ -1,10 +1,22 @@
 <html>
 	<head>
 		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-		<script src="/js/passcheck.js"></script>
+		<script src="/js/dys.js"></script>
 		<script src="/js/zxcvbn.js"></script>
 		<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/yeti/bootstrap.min.css" rel="stylesheet">
+		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
 		<style>
+			.canvas-container{
+				background: transparent;
+				opacity: .5;
+				box-shadow: 1px 5px 4px 4px #ccc;
+				min-height: 60%;
+				max-width: 80%;
+				margin: 0 auto;
+				position: static;
+				clear: both;
+				float: center;
+			}
 			.content{
 				-webkit-transition:all .5s ease-in-out;
 				opacity: 1;
@@ -24,6 +36,19 @@
 			.padding-top{
 				margin-top: 10px;
 			}
+			.start, .rules{
+				border-radius: 30px;
+				min-width: 50%;
+			}
+			.target{
+				margin-right: 5%;
+				width: 90px;
+				height: 90px;
+			}
+			.target-content{
+				margin-left: 20%;\
+				min-width: 70%;
+			}
 			.title{
 				margin: 0 auto;
 				float:center;
@@ -34,24 +59,62 @@
 			var Mhash = {};
 			$(window).load(function(){
 				Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
+				Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
+				Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
+				Mhash.params,
+				Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn start btn-danger center-block padding-top'>Quit</button></div></div>");
 			});
 			$(document).ready(function(){
 				var $this = $(this),
 					result = {};
 					
-					$this.on('click', '.btn', function(e){
+					$this.on('click', '.check-button', function(e){
 						e.preventDefault();
 						result = zxcvbn($('#pw').val());
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(Mhash.results);
-							$('#entropy').html('Entropy: ' + result.entropy);
-							$('#score').html('Score: ' + result.score);
+							$('.content').html(Mhash.start);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
 						}, 600);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
-						}, 950);
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+						}, 1250);
+					})
+					.on('click', '.start', function(e){
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.canvas);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+							setTimeout(function(){
+							$this.trigger('gameOver');
+						},2000);
+						}, 1250);
+						
+					})
+					.on('click', 'rules', function(e){
+
+					})
+					.on('gameOver', function(e){
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.over);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+						}, 1250)
 					});
 			});
 		</script>
@@ -94,7 +157,7 @@
 					<div class="col-md-8">
 						<form class="form" role="form"> 
 						    <input type="password" class="form-control" id="pw" placeholder="Password" style="min-width:50%;">
-							<button type="submit" class="btn btn-primary btn-lg padding-top clearfix center-block">How's My Password?</button>
+							<button type="submit" class="check-button btn btn-primary btn-lg padding-top clearfix center-block">How's My Password?</button>
 						</form>
 					</div>
 				</div>
