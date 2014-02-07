@@ -3,7 +3,6 @@ pw-checker
 
 Simple implementation of an algorithm to check the entropy of a supplied password.
 
-
 Goals:
 
 - Calculate score using zxcvbn (this is awesome)
@@ -17,6 +16,10 @@ Gameplay:
 - We don't explicitly tell the user how their passwords "scored", but we will color the barriers according to relative strength.
 - This should not be that hard to implement.  Once we get this down, we can implement "active mode" (e.g. user gets to supply input mid-game to defend themselves).
 
+Testing:
+--------
+
+Easy way: run `go run server.go` in the main directory, then navigate to `http://localhost:8080/`.
 
 References:
 -----------
