@@ -221,7 +221,7 @@
 					passwords: 0,
 					isGameplay: false,
 					isMenu: false},
-					isGameOver = false,
+					isGameOver = true,
 					isPrompt = false,
 					num_dead = 0,
 					canvas,
@@ -402,14 +402,17 @@
 						//Replace this if with your halt condition
 						//This can be replaced with a "while(true)", but this will have serious performance implications
 						framecount = framecount + 1;
-						var pwp = Math.random() < .001;
-						if(pwp && !isPwPrompt){
-							isPrompt = true;
-							isPwPrompt = true;
-							$(document).trigger('passPrompt');
-						}
+
 						if(!isGameOver)
-						{       
+						{
+
+							var pwp = Math.random() < .001;
+							if(pwp && !isPwPrompt){
+								isPrompt = true;
+								isPwPrompt = true;
+								$(document).trigger('passPrompt');
+							}
+
 						  //Private animation loop functions
 
 						  //Resets the canvas to its initial state	
@@ -701,6 +704,7 @@
 					})
 					.on('gameOver', function(e){
 						e.preventDefault();
+						Mhash.dys.setGameOver(true);
 						$('.content').addClass('slide-out');
 						var pass = 0,
 							score = 0;
@@ -720,7 +724,7 @@
 
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
-							Mhash.dys.setGameOver(true);
+							
 							initMhash();
 						}, 800);
 						setTimeout(function(){
