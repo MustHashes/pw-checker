@@ -46,7 +46,7 @@
 			.padding-top{
 				margin-top: 10px;
 			}
-			.start, .rules, .quit, .check-button{
+			.start, .rules, .quit, .check-button, .high-scores, .begin{
 				border-radius: 30px;
 				min-width: 40%;
 			}
@@ -55,6 +55,9 @@
 				margin-top: 12%;
 				border-radius: 30px;
 				min-width: 40%;
+			}
+			.hotfix{
+				padding-left:-100px;
 			}
 			.medium, .easy, .begin, .high-scores{
 				border-radius: 30px;
@@ -202,7 +205,7 @@
 				Mhash.test = $.parseHTML("<div class='row'><h2 class='center-block' style='width:50%;'>Test Your Password-Fu</h2></div><div class='row'><div class='col-md-2'></div><div class='col-md-6 col-md-offset-1'><form class='form' role='form'><input type='password' class='form-control' id='pw' placeholder='Password' style='min-width:25%;'><button type='submit' class='check-button btn btn-primary btn-lg padding-top clearfix center-block'>How Strong is My Password?</button></form></div></div>");
 				Mhash.params;
 				Mhash.pwfield = $.parseHTML("<input type='password' class='form-control param' placeholder='Password'>");
-				Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
+				Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-2'></div><div class='col-md-8 hotfix center-block'><button class='btn start btn-default btn-lg center-block'>Try Again?</button><button class='btn btn-lg  quit btn-danger center-block padding-top'>Quit</button><button type='submit' class='high-scores btn btn-default btn-lg padding-top clearfix center-block'>Scores</button></div></div>");
 				Mhash.inform=$.parseHTML("<div class='row'><h3>So how well did you survive the digital jungle?</h3></div><div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3><h3 id='ttc'></h3></div></div>");
 				Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
 				Mhash.begin = $.parseHTML("<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>");
@@ -723,7 +726,6 @@
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
-
 							initMhash();
 						}, 1250);
 					})
