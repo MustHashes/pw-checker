@@ -199,10 +199,9 @@
 				e_img = '/img/enemy.png',
 				framecount = 0;
 
-			var init = function(params){
+			var init = function(results){
 				//This enables you to pass a js object
 				//as an argument to your game loop and initializes variables based on them.
-				defaults = $.extend({}, defaults, params || {});
 
 				//Get the canvas element, grab the 2d context to be able to manipulate it from each of the helper functions
 				canvas = document.getElementById('game');
@@ -224,24 +223,8 @@
 					}
 
 				    forts = [];
-				    var num_forts = 1,
+				    var num_forts = results.length,
 				    	num_icons = 5;
-				    switch (defaults.difficulty){
-				    	case 0: 
-				    		num_forts = 5;
-				    		num_icons = 1;
-				    		break;
-				    	case 1:
-				    		num_forts = 3;
-				    		num_icons = 2;
-				    		break;
-				    	case 2:
-				    		num_forts = 1;
-				    		num_icons = 5;
-				    		break;
-				    	default:
-				    		break;
-				    }
 				    var pos = {
 				    	x : 130,
 				    	y: 700
@@ -509,7 +492,7 @@
 								results.push(zxcvbn(pwords[j]));
 							}
 							console.log(results);
-							Mhash.dys.init();
+							Mhash.dys.init(results);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
