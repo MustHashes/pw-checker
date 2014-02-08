@@ -285,7 +285,8 @@
 					//Add the animation loop to the frame queue
 			        window.requestAnimFrame(run);
 			    };
-			   var update = function() {
+			    
+			    var update = function() {
 			        //define position updating logic here
 			        
 			        //update enemy weapon particle position
@@ -294,6 +295,15 @@
 
 			        //generate random events? 
 			        //Eg. random compromise based on site security, 
+			    };
+
+			    // returns health to decrease (either random compromise)
+			    // or the portion of maxhealth to kill kill kill
+			    var calculate = function(currentLevel, maxHealth, score) {
+			    	if (Math.random() < 0.01 * currentLevel) {
+			    		// random compromise
+			    	}
+			    	return maxHealth / (score + 1);
 			    };
 
 				var draw = function() {
