@@ -155,13 +155,21 @@
 				    	x : (canvas.width / 5 )/2,
 				    	y: canvas.height - 100
 				    }
-				    for (var j = 0; j < 5; j++){
-				    	drawing = new Image();
-						drawing.src = imgs[j];
-						context.drawImage(drawing,firstPos.x,firstPos.y);
-				    	firstPos.x = firstPos.x + (canvas.width / 5);
-				    	
-				    }
+				    drawing1 = new Image();
+					drawing1.src = imgs[0];
+					drawing2 = new Image();
+					drawing2.src = imgs[1];
+					drawing3 = new Image();
+					drawing3.src = imgs[2];
+					drawing4 = new Image();
+					drawing4.src = imgs[3];
+					drawing5 = new Image();
+					drawing5.src = imgs[4];
+				    context.drawImage(drawing1,100,500, 100, 100);
+				    context.drawImage(drawing2,300,500, 100, 100);
+				    context.drawImage(drawing3,500,500, 100, 100);
+				    context.drawImage(drawing4,700,500, 100, 100);
+				    context.drawImage(drawing5,900,500, 100, 100);
 				    isMenu = true;
 				    console.log("it got here!");
 
