@@ -99,7 +99,7 @@
 
 				this.img = img;
 			};
-			Mhash.Fort = function(pos, radius, max_health){
+			Mhash.Fort = function(pos, radius, max_health, password){
 
 				this.pos = {};
 				this.pos.x = pos.x || 0;
@@ -228,7 +228,7 @@
 				framecount = 0,
 				num_forts = 0;
 
-			var init = function(results){
+			var init = function(results, pwds){
 				//This enables you to pass a js object
 				//as an argument to your game loop and initializes variables based on them.
 
@@ -260,7 +260,7 @@
 				    		forts[1] = new Mhash.Fort(pos={x: 440, y:750}, 100, results[1].crack_time);
 				    		forts[2] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[2].crack_time);
 				    		forts[3] = new Mhash.Fort(pos={x: 960, y:750}, 100, results[3].crack_time);
-				    		forts[4] = new Mhash.Fort(pos={x: 1120, y:750}, 100, results[4].crack_time);
+				    		forts[4] = new Mhash.Fort(pos={x: 1220, y:750}, 100, results[4].crack_time);
 				    		break;
 				    	case 3:
 				    		forts[0] = new Mhash.Fort(pos={x: 270, y:850}, 300, results[0].crack_time);
@@ -358,22 +358,21 @@
 						}*/
 
 					}
-					if(framecount % 5 == 0){
+					if(framecount % 5 == 0 && !isPrompt){
 						var i = parseInt(Math.random() * 3);
 						var position = {
-						x: enemies[i].pos.x + 100,
-						y: enemies[i].pos.y + 150
-					};
+							x: enemies[i].pos.x + 100,
+							y: enemies[i].pos.y + 150
+						};
 
 					 var angle = (parseInt(Math.random() * 2)+1) * (Math.PI);
 				     var randomVelocity =  (Math.random() * 5) + 1;
 				     var particleAngle = angle;
 					 var newBullet = new Mhash.Bullet(position, null, {
-			            x: Math.cos(particleAngle) * randomVelocity,
-			            y: Math.sin(particleAngle) * randomVelocity
-			        }, true);
-
-					bullets.push(newBullet);
+			            	x: Math.cos(particleAngle) * randomVelocity,
+			            	y: Math.sin(particleAngle) * randomVelocity
+			        	}, true);					
+					 bullets.push(newBullet);
 					}
 					
 					
@@ -491,11 +490,16 @@
 					isPrompt = false;
 				};
 
+				var getNumForts = function(){
+					return num_forts;
+				};
+
 				//This return statement should contain a js object
 				//of every "public" function for your module
 				return{
 					init: init,
-					clearPrompt: clearPrompt
+					clearPrompt: clearPrompt,
+					getNumForts: getNumForts
 				};	
 
 			})();
@@ -504,6 +508,7 @@
 			$(document).ready(function(){
 				var $this = $(this),
 					result = {},
+					results = [],
 					difficulty = 0,
 					num_fields;
 					$this.on('hasDied', function(e){
@@ -513,8 +518,10 @@
 							Mhash.dys.clearPrompt();
 						});
 
-						if (Mhash.dys.num_forts != 5)
+						if (Mhash.dys.getNumForts() != 5){
 							$('#deadHidden').text("Because you grouped two or more services under the same password, your account has been breached in more than one location.");
+						}
+							
 						$('#deadModal').modal();
 					})
 					.on('click', '.check-button', function(e){
@@ -576,8 +583,7 @@
 								for(var j = 0; j < pwords.length; j++){
 									results.push(zxcvbn(pwords[j]));
 								}
-								console.log(results);
-								Mhash.dys.init(results);
+								Mhash.dys.init(results, pwords);
 							}, 800);
 							setTimeout(function(){
 								$('.content').removeClass('slide-in');
@@ -587,7 +593,6 @@
 					.on('click', '.difficulty', function(e){
 						e.preventDefault();
 						difficulty = parseInt($(e.target).data('difficulty'));
-						console.log(difficulty);
 						num_fields = 0;
 						$('.content').addClass('slide-out');
 						setTimeout(function(){	
