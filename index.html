@@ -9,7 +9,7 @@
 
 
 			@media screen and (max-width: 500px){
-				.start, .rules, .quit, .hard, .medium, .easy, .submit{
+				.start, .rules, .quit, .hard, .medium, .easy, .submit, .check-button, .begin{
 				border-radius: 30px;
 				min-width: 80%;
 				}
@@ -46,7 +46,7 @@
 			.padding-top{
 				margin-top: 10px;
 			}
-			.start, .rules, .quit{
+			.start, .rules, .quit, .check-button{
 				border-radius: 30px;
 				min-width: 40%;
 			}
@@ -56,7 +56,7 @@
 				border-radius: 30px;
 				min-width: 40%;
 			}
-			.medium, .easy, .submit{
+			.medium, .easy, .begin{
 				border-radius: 30px;
 				min-width: 40%;
 			}
@@ -141,7 +141,7 @@
 			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 			Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
 			
-			Mhash.modes = $.parseHTML("<div class='row'><button type='submit' data-difficulty='2' class='hard difficulty btn btn-danger btn-lg padding-top clearfix center-block'>Hard</button><button type='submit' data-difficulty='1' class='medium difficulty btn btn-warning btn-lg padding-top clearfix center-block'>Medium</button><button type='submit' data-difficulty='1' class='easy difficulty btn btn-success btn-lg padding-top clearfix center-block'>Easy</button></div>");
+			Mhash.modes = $.parseHTML("<div class='row'><button type='submit' data-difficulty='2' class='hard difficulty btn btn-danger btn-lg padding-top clearfix center-block'>Hard</button><button type='submit' data-difficulty='1' class='medium difficulty btn btn-warning btn-lg padding-top clearfix center-block'>Medium</button><button type='submit' data-difficulty='0' class='easy difficulty btn btn-success btn-lg padding-top clearfix center-block'>Easy</button></div>");
 			Mhash.passfields = $.parseHTML("<div class='row'><div class='col-md-2></div><div class='col-md-8'><form class='form' role='form' id='params'></form></div></div>");
 			
 			Mhash.params;
@@ -459,6 +459,7 @@
 						setTimeout(function(){	
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.passfields);
+							console.log(difficulty);
 							switch(difficulty){
 								case 0:
 									num_fields = 5
@@ -473,9 +474,18 @@
 									break;
 							}	
 								var params = document.getElementById('params');
+								/*
+								var passField = ;
 								for(var i = 0; i < num_fields; i++){
 									$('#params').append($(Mhash.pwfield));
-								}
+									<input type='password' class='form-control param' placeholder='Password'>
+								}*/
+								
+								
+								var passField = "<div class='row top-space'></div>";
+								for(var i=1;i<=num_fields;i++)
+									passField += "<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy" + i + "'></label><input type='password' class='form-control param center-block' id='easy" + i + "' placeholder='Password #" + i + "'></div></div>";
+								$("#params").append($.parseHTML(passField));
 								$("#params").append(Mhash.begin);
 						}, 800);
 						setTimeout(function(){
@@ -546,11 +556,11 @@
 				<h3>Check Yo Password</h3>
 			</div>
 			<div class="container-fluid content">
-				<div class="row">
+				<div class="row top-space">
 					<div class="col-md-2"></div>
-					<div class="col-md-8">
+					<div class="col-md-6 col-md-offset-1">
 						<form class="form" role="form"> 
-						    <input type="password" class="form-control" id="pw" placeholder="Password" style="min-width:50%;">
+						    <input type="password" class="form-control" id="pw" placeholder="Password" style="min-width:25%;">
 							<button type="submit" class="check-button btn btn-primary btn-lg padding-top clearfix center-block">How's My Password?</button>
 						</form>
 					</div>
