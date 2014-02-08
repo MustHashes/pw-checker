@@ -531,6 +531,17 @@
 							
 						$('#deadModal').modal();
 					})
+					.on('passPrompt', function(e) {
+						e.preventDefault();
+
+						$('#passModal').on('hidden.bs.modal', function(e) {
+							Mhash.dys.clearPrompt();
+						});
+
+						// FIXME set $('#passId') to current password #
+							
+						$('#passModal').modal();
+					})
 					.on('click', '.check-button', function(e){
 						e.preventDefault();
 						console.log(zxcvbn($('#pw').val()));
@@ -725,6 +736,7 @@
 			</div>
 			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Rules</h4></div><div class='modal-body'>The goal of the game is to make sure that your fortresses are not defeated by space invaders (or in this case, passwords against hackers). <b>Your best offense is a strong defense</b>, so make sure to utilise strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Use common sense when choosing what password protects what service.</li><ul></div></div></div></div>
 			<div class='modal fade' id='deadModal' tabindex='-1' role='dialog' aria-labelledby='deadLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='deadLabel'>You've been hacked!</h4></div><div class='modal-body'>Despite your best efforts, your password has been compromised. Hackers have been able to successfully gain access to your account. <em id="deadHidden"></em></div></div></div></div>
+			<div class='modal fade' id='passModal' data-keyboard='false' tabindex='-1' role='dialog' aria-labelledby='passLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><h4 class='modal-title' id='passLabel'>Reauthenticate</h4></div><div class='modal-body'>It's time to "re-login" again. Can you reauthenticate with the password for <code id="passId"></code>?<input type='password' class='form-control param' placeholder='Password'></div></div></div></div>
 		</main>
 		<footer>
 		</footer>
