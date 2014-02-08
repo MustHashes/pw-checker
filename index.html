@@ -4,6 +4,7 @@
 		<script src="/js/zxcvbn.js"></script>
 		<link href="//netdna.bootstrapcdn.com/bootswatch/3.1.0/yeti/bootstrap.min.css" rel="stylesheet">
 		<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet">
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
 		<style>
 
 
@@ -14,8 +15,7 @@
 				}
 			}
 			.canvas-container{
-				background: transparent;
-				opacity: .5;
+				background: #333;
 				box-shadow: 1px 5px 4px 4px #ccc;
 				min-height: 60%;
 				max-width: 80%;
@@ -91,13 +91,49 @@
 		})();
 
 			var Mhash = {};
+			Mhash.Enemy = function(pos, img){
+				this.bullets = [];
+
+				this.pos = {};
+				this.pos.x = pos.x || 0;
+				this.pos.y = pos.y || 0;
+
+				this.img = img;
+			};
+			Mhash.Bullet = function(pos, target, vel, marker, usePhysics) {
+				  // properties for animation
+				  // and colouring
+				  this.GRAVITY  = 0.06;
+
+				  this.pos = {
+				    x: pos.x || 0,
+				    y: pos.y || 0
+				  };
+
+				  this.vel = {
+				    x: vel.x || 10,
+				    y: vel.y || 10
+				  };
+
+				  this.lastPos = {
+				    x: this.pos.x,
+				    y: this.pos.y
+				  };
+
+				  this.target = {
+				    y: 0
+				  };
+				  this.color = "#ccc";
+
+				  this.usePhysics = usePhysics || false;
+
+			};
 			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
 			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 			Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
 			
 			Mhash.modes = $.parseHTML("<div class='row'><button type='submit' class='hard btn btn-danger btn-lg padding-top clearfix center-block'>Hard</button><button type='submit' class='medium btn btn-warning btn-lg padding-top clearfix center-block'>Medium</button><button type='submit' class='easy btn btn-success btn-lg padding-top clearfix center-block'>Easy</button></div>");
 			Mhash.easyPassword = $.parseHTML("<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div>");
-			
 			
 			Mhash.params;
 			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
@@ -125,11 +161,12 @@
 				targets = [],
 				imgs = [
 				'/img/icons/no border/facebook500.png',
-				'/img/icons/no border/googleplus.png',
+				'/img/icons/no border/googleplus-revised.png',
 				'/img/icons/no border/twitter.png',
 				'/img/icons/no border/email.png',
 				'/img/icons/no border/instagram.png',
-				];
+				]
+				e_img = '/img/enemy.png';
 
 			var init = function(params){
 				//This enables you to pass a js object
@@ -147,11 +184,17 @@
 			    context = canvas.getContext("2d");
 
 			    //Initialize enemies
-
-			    //Initialize targets
-
-			    //Start event loop
 				    enemies = [];
+				    for(var i = 0; i < 3; i++){
+				    	var temp = {};
+				    		temp.x = 300 + (300 * i);
+							temp.y = 100;
+				    	enemies[i] = new Mhash.Enemy(temp, e_img);
+				    	for (var j = 0; j < 100; j++){
+				    		enemies[i][j]
+				    	}
+				    }
+
 				    forts = [];
 				    var num_forts = 1,
 				    	num_icons = 5;
@@ -171,10 +214,10 @@
 				    	default:
 				    		break;
 				    }
-				    var firstPos = {
-				    	x : (canvas.width / 5 )/2,
-				    	y: canvas.height - 100
-				    }
+				    var pos = {
+				    	x : 130,
+				    	y: 700
+				    };
 				    drawing1 = new Image();
 					drawing1.src = imgs[0];
 					drawing2 = new Image();
@@ -185,15 +228,22 @@
 					drawing4.src = imgs[3];
 					drawing5 = new Image();
 					drawing5.src = imgs[4];
-				    context.drawImage(drawing1,100,500, 100, 100);
-				    context.drawImage(drawing2,300,500, 100, 100);
-				    context.drawImage(drawing3,500,500, 100, 100);
-				    context.drawImage(drawing4,700,500, 100, 100);
-				    context.drawImage(drawing5,900,500, 100, 100);
+				    context.drawImage(drawing1,pos.x,pos.y, 100, 100);
+				    context.drawImage(drawing2,pos.x + 260,pos.y, 100, 100);
+				    context.drawImage(drawing3,pos.x + 520,pos.y, 100, 100);
+				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
+				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
 				    isMenu = true;
-				    console.log("it got here!");
+				    context.strokeStyle = 'rgb(0,255,0)';
+      				context.lineWidth = 10;
+				    for(var i = 0; i<5; i++){
+					    context.beginPath();
+						context.arc(180+(260*i), 750, 100, 0, Math.PI*2, true);
+						context.stroke(); 
+						context.closePath();
+					}
 
-				    //run(e);
+				    run();
 				};
 
 				var plotParticles = function(){
@@ -226,14 +276,12 @@
 			            context.fillRect(position.x, position.y, 4, 4);
 			        }
 				};
-				var initRun = function(e){
-					run(e);
-				}
 
-				var run = function(e){
+				var run = function(){
 					//Replace this if with your halt condition
 					//This can be replaced with a "while(true)", but this will have serious performance implications
-					if(!isGameOver)
+					
+					if(!defaults.isGameOver)
 					{       
 					  //Private animation loop functions
 
@@ -255,7 +303,8 @@
 					//Add the animation loop to the frame queue
 			        window.requestAnimFrame(run);
 			    };
-			   var update = function() {
+			    
+			    var update = function() {
 			        //define position updating logic here
 			        
 			        //update enemy weapon particle position
@@ -266,10 +315,62 @@
 			        //Eg. random compromise based on site security, 
 			    };
 
+			    // returns health to decrease (either random compromise)
+			    // or the portion of maxhealth to kill kill kill
+			    var calculate = function(seconds, totalhits) {0
+			    	if (Math.random() < 0.01 * seconds/100) {
+			    		// random compromise
+			    	}
+			    	
+			    	// square totalhits on the obj, then take away said totalhits
+			    	// from maxHealth
+			    	return totalhits^2;
+			    };
+
 				var draw = function() {
 				  //define image drawing (read: context updating) logic here
 				  
 				  //Draw all objects in current context (menu, gameplay, etc.)
+
+				    var pos = {
+				    	x : 130,
+				    	y: 700
+				    };
+				  drawing1 = new Image();
+					drawing1.src = imgs[0];
+					drawing2 = new Image();
+					drawing2.src = imgs[1];
+					drawing3 = new Image();
+					drawing3.src = imgs[2];
+					drawing4 = new Image();
+					drawing4.src = imgs[3];
+					drawing5 = new Image();
+					drawing5.src = imgs[4];
+				    context.drawImage(drawing1,pos.x,pos.y, 100, 100);
+				    context.drawImage(drawing2,pos.x + 260,pos.y, 100, 100);
+				    context.drawImage(drawing3,pos.x + 520,pos.y, 100, 100);
+				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
+				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
+				    isMenu = true;
+				    context.strokeStyle = 'rgb(0,255,0)';
+      				context.lineWidth = 10;
+				    for(var i = 0; i<5; i++){
+					    context.beginPath();
+						context.arc(180+(260*i), 750, 100, 0, Math.PI*2, true);
+						context.stroke(); 
+						context.closePath();
+					}
+
+					//Dynamically update enemies!
+
+					for(var i = 0; i < 3; i++){
+				    	enemy = new Image();	
+						enemy.src = enemies[i].img;
+						context.drawImage(enemy, enemies[i].pos.x, enemies[i].pos.y, 200, 200);
+				    }
+					console.log('animating');
+
+
 				};
 
 				var clear = function(){
@@ -292,29 +393,29 @@
 					result = {};
 					$this.on('click', '.check-button', function(e){
 						e.preventDefault();
-						result = zxcvbn($('#pw').val());
+						console.log(zxcvbn($('#pw').val()));
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.start);
 							$('.title').append(Mhash.lock);
-							//$('#entropy').html('Entropy: ' + result.entropy);
-							//$('#score').html('Score: ' + result.score);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
 						}, 1250);
+
 					})
 					.on('click', '.start', function(e){
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.lock').css('display', 'none');
+							$('.content').html(Mhash.canvas);
+							Mhash.dys.init();
 							$('.content').addClass('slide-in').removeClass('slide-out');
 						}, 600);
 						$('.content').html(Mhash.modes);
 						//$('.content').html(Mhash.canvas);
-						
 						
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
@@ -323,10 +424,9 @@
 								//	$this.trigger('gameOver');
 								//},2000);
 						}, 1250);
-						Mhash.dys.init();
 					})
 					.on('click', '.rules', function(e){
-
+						$('#rulesModal').modal()
 					})
 					
 					.on('click', '.easy', function(e){
@@ -482,6 +582,7 @@
 					</div>
 				</div>
 			</div>
+			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Rules</h4></div><div class='modal-body'>The goal of the game is to make sure that your fortresses are not defeated by space invaders (or in this case, passwords against hackers). <b>Your best offense is a strong defense</b>, so make sure to utilise strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Use common sense when choosing what password protects what service.</li><ul></div></div></div></div>
 		</main>
 		<footer>
 		</footer>
