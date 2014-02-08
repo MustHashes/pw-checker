@@ -397,13 +397,13 @@
 					//Replace this if with your halt condition
 					//This can be replaced with a "while(true)", but this will have serious performance implications
 					framecount = framecount + 1;
-					var pwp = Math.random() < .1;
+					var pwp = Math.random() < .001;
 					if(pwp){
 						isPrompt = true;
 						isPwPrompt = true;
 						$(document).trigger('passPrompt');
 					}
-					if(!defaults.isGameOver)
+					if(!isGameOver)
 					{       
 					  //Private animation loop functions
 
@@ -434,18 +434,6 @@
 
 			        //generate random events? 
 			        //Eg. random compromise based on site security, 
-			    };
-
-			    // returns health to decrease (either random compromise)
-			    // or the portion of maxhealth to kill kill kill
-			    var calculate = function(seconds, totalhits) {
-			    	if (Math.random() < 0.01 * seconds/100) {
-			    		// random compromise
-			    	}
-			    	
-			    	// square totalhits on the obj, then take away said totalhits
-			    	// from maxHealth
-			    	return totalhits^2;
 			    };
 
 				var draw = function() {
@@ -508,12 +496,32 @@
 					return num_forts;
 				};
 
+				var getGameOver = function() {
+					return isGameOver;
+				}
+
+				var setGameOver = function(gameover) {
+					isGameOver = gameover;
+				}
+
+				var getPwPrompt = function() {
+					return isPwPrompt;
+				}
+
+				var setPwPrompt = function(PwPrompt) {
+					isPwPrompt = PwPrompt;
+				}
+
 				//This return statement should contain a js object
 				//of every "public" function for your module
 				return{
 					init: init,
 					clearPrompt: clearPrompt,
-					getNumForts: getNumForts
+					getNumForts: getNumForts,
+					getGameOver: getGameOver,
+					setGameOver: setGameOver,
+					getPwPrompt: getPwPrompt,
+					setPwPrompt: setPwPrompt
 				};	
 
 			})();
@@ -541,13 +549,23 @@
 					.on('passPrompt', function(e) {
 						e.preventDefault();
 
-						$('#passModal').on('hidden.bs.modal', function(e) {
-							Mhash.dys.clearPrompt();
-						});
+						if (Mhash.dys.getPwPrompt()) {
 
-						// FIXME set $('#passId') to current password #
+							$('#passModal').on('hidden.bs.modal', function(e) {
+								Mhash.dys.clearPrompt();
+								Mhash.dys.setPwPrompt(false);
+							});
+
+							// FIXME set $('#passId') to current password #
 							
-						$('#passModal').modal();
+							$('#passModal').modal();
+						}
+
+						
+					})
+					.on('click', '.btnLogin', function(e) {
+						e.preventDefault();
+						$('#passModal').modal('hide');
 					})
 					.on('click', '.check-button', function(e){
 						e.preventDefault();
@@ -587,6 +605,7 @@
 					})
 					.on('click', '.begin', function(e){
 						e.preventDefault();
+						Mhash.dys.setGameOver(false);
 						var pwords = [],
 							results = [];
 						for(var k = 1; k <= num_fields; k++){
@@ -676,6 +695,7 @@
 							$('.content').html(Mhash.over);
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
+							Mhash.dys.setGameOver(true);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
@@ -743,7 +763,7 @@
 			</div>
 			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Rules</h4></div><div class='modal-body'>The goal of the game is to make sure that your fortresses are not defeated by space invaders (or in this case, passwords against hackers). <b>Your best offense is a strong defense</b>, so make sure to utilise strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Use common sense when choosing what password protects what service.</li><ul></div></div></div></div>
 			<div class='modal fade' id='deadModal' tabindex='-1' role='dialog' aria-labelledby='deadLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='deadLabel'>You've been hacked!</h4></div><div class='modal-body'>Despite your best efforts, your password has been compromised. Hackers have been able to successfully gain access to your account. <em id="deadHidden"></em></div></div></div></div>
-			<div class='modal fade' id='passModal' data-keyboard='false' tabindex='-1' role='dialog' aria-labelledby='passLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><h4 class='modal-title' id='passLabel'>Reauthenticate</h4></div><div class='modal-body'>It's time to "re-login" again. Can you reauthenticate with the password for <code id="passId"></code>?<input type='password' class='form-control param' placeholder='Password'></div></div></div></div>
+			<div class='modal fade' id='passModal' data-keyboard='false' tabindex='-1' role='dialog' aria-labelledby='passLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><h4 class='modal-title' id='passLabel'>Reauthenticate</h4></div><div class='modal-body'>It's time to "re-login" again. Can you reauthenticate with the password for <code id="passId"></code>?<input type='password' class='form-control param' placeholder='Password'><button class="btn btn-default btnLogin" type="submit">Login</button></div></div></div></div>
 		</main>
 		<footer>
 		</footer>
