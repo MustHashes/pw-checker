@@ -101,6 +101,7 @@
 			};
 			Mhash.Fort = function(pos, radius, max_health){
 
+				this.pos = {};
 				this.pos.x = pos.x || 0;
 				this.pos.y = pos.y || 0;
 
@@ -111,13 +112,34 @@
 
 				this.count = 0;
 
-				this.color = {
-					r: 42,
-					g: 186,
-					b: 39
-				};
+				this.color = {};
+				this.color.r = 42;
+				this.color.g = 186;
+				this.color.b = 39;
 
 			};
+			Mhash.Fort.prototype.score = function(){
+				this.current_health = this.current_health - Math.pow(2, this.count);
+				this.count = this.count + 1;
+				var ratio = this.current_health/this.max_health;
+				console.log(ratio);
+				if (ratio >= .66){
+					this.color.r = 42;
+					this.color.g = 186;
+					this.color.b = 39;
+				}
+				else if (ratio >= .1){
+					this.color.r = 232;
+					this.color.g = 210;
+					this.color.b = 52;
+				}
+				else{
+					this.color.r = 255;
+					this.color.g = 0;
+					this.color.b = 0;
+				}
+
+			}
 			Mhash.Bullet = function(pos, target, vel, usePhysics) {
 				  // properties for animation
 				  // and colouring
@@ -197,7 +219,8 @@
 				'/img/icons/no border/instagram.png',
 				]
 				e_img = '/img/enemy.png',
-				framecount = 0;
+				framecount = 0,
+				num_forts = 0;
 
 			var init = function(results){
 				//This enables you to pass a js object
@@ -223,18 +246,28 @@
 					}
 
 				    forts = [];
-				    var num_forts = results.length,
-				    	num_icons = 5;
+				    num_forts = results.length;
+				    	//(180+(260*i), 750, 180, 0, Math.PI*2, true);
 				    switch(num_forts){
 				    	case 5:
+				    		forts[0] = new Mhash.Fort(pos={x: 180, y:750}, 100, results[0].crack_time);
+				    		forts[1] = new Mhash.Fort(pos={x: 440, y:750}, 100, results[1].crack_time);
+				    		forts[2] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[2].crack_time);
+				    		forts[3] = new Mhash.Fort(pos={x: 960, y:750}, 100, results[3].crack_time);
+				    		forts[4] = new Mhash.Fort(pos={x: 1120, y:750}, 100, results[4].crack_time);
 				    		break;
 				    	case 3:
+				    		forts[0] = new Mhash.Fort(pos={x: 270, y:850}, 300, results[0].crack_time);
+				    		forts[1] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[1].crack_time);
+				    		forts[2] = new Mhash.Fort(pos={x: 1120, y:850}, 300, results[2].crack_time);
 				    		break;
 				    	case 1:
+				    		forts[0] = new Mhash.Fort(pos={x: 700, y:750}, 700, results[0].crack_time);
 				    		break;
 				    	default:
 				    		break;
 				    }
+
 				    var pos = {
 				    	x : 130,
 				    	y: 700
@@ -255,22 +288,41 @@
 				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
 				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
 				    isMenu = true;
-				    context.strokeStyle = 'rgb(0,255,0)';
       				context.lineWidth = 10;
-				    for(var i = 0; i<5; i++){
+				    /*for(var i = 0; i<5; i++){
 					    context.beginPath();
 						context.arc(180+(260*i), 750, 180, 0, Math.PI*2, true);
 						context.stroke(); 
 						context.closePath();
+					}*/
+					for(var i = 0; i < num_forts; i++){
+				   		context.strokeStyle = "rgb(" + forts[i].color.r + "," + forts[i].color.g + ","+ forts[i].color.b +")";
+				   		console.log(context.strokeStyle);
+      					context.lineWidth = 10;
+						context.beginPath();
+						context.arc(forts[i].pos.x, forts[i].pos.y, forts[i].radius, 0, Math.PI*2, true);
+						context.stroke(); 
+						context.closePath();
 					}
-
 				    run();
 				};
 
 				var updateBullets = function(){
 					for (var j = 0; j < bullets.length; j++){
 						bullets[j].move();
-						if (bullets[j].pos.y >= 650){
+						for(var i = 0; i < forts.length; i++){
+							if(bullets[j].pos.y >= (forts[i].pos.y - forts[i].radius)){
+								if(bullets[j].pos.x >= forts[i].pos.x - forts[i].radius 
+									&& bullets[j].pos.x <= forts[i].pos.x + forts[i].radius){
+										if(forts[i].current_health >= 0){
+											bullets.splice(j, 1);
+											forts[i].score();
+											break;
+										}
+								}
+							}
+						}
+						/*if (bullets[j].pos.y >= 650){
 							if(bullets[j].pos.x >= 80 && bullets[j].pos.x <=280){
 								bullets.splice(j, 1);
 							}
@@ -289,7 +341,7 @@
 							else{
 
 							}
-						}
+						}*/
 
 					}
 					if(framecount % 5 == 0){
@@ -394,11 +446,12 @@
 				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
 				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
 				    isMenu = true;
-				    context.strokeStyle = 'rgb(0,255,0)';
       				context.lineWidth = 10;
-				    for(var i = 0; i<5; i++){
-					    context.beginPath();
-						context.arc(180+(260*i), 750, 100, 0, Math.PI*2, true);
+				    for(var i = 0; i < num_forts; i++){
+				   		context.strokeStyle = "rgb(" + forts[i].color.r + "," + forts[i].color.g + ","+ forts[i].color.r +")";
+      					context.lineWidth = 10;
+						context.beginPath();
+						context.arc(forts[i].pos.x, forts[i].pos.y, forts[i].radius, 0, Math.PI*2, true);
 						context.stroke(); 
 						context.closePath();
 					}
