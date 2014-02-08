@@ -508,8 +508,14 @@
 					num_fields;
 					$this.on('hasDied', function(e){
 						e.preventDefault();
-						console.log('first death');
-						Mhash.dys.clearPrompt();
+
+						$('#deadModal').on('hidden.bs.modal', function(e) {
+							Mhash.dys.clearPrompt();
+						});
+
+						if (Mhash.dys.num_forts != 5)
+							$('#deadHidden').text("Because you grouped two or more services under the same password, your account has been breached in more than one location.");
+						$('#deadModal').modal();
 					})
 					.on('click', '.check-button', function(e){
 						e.preventDefault();
@@ -706,6 +712,7 @@
 				</div>
 			</div>
 			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Rules</h4></div><div class='modal-body'>The goal of the game is to make sure that your fortresses are not defeated by space invaders (or in this case, passwords against hackers). <b>Your best offense is a strong defense</b>, so make sure to utilise strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Use common sense when choosing what password protects what service.</li><ul></div></div></div></div>
+			<div class='modal fade' id='deadModal' tabindex='-1' role='dialog' aria-labelledby='deadLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='deadLabel'>You've been hacked!</h4></div><div class='modal-body'>Despite your best efforts, your password has been compromised. Hackers have been able to successfully gain access to your account. <em id="deadHidden"></em></div></div></div></div>
 		</main>
 		<footer>
 		</footer>
