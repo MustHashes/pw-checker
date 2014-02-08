@@ -417,9 +417,17 @@
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.lock').css('display', 'none');
+<<<<<<< Updated upstream
 							$('.content').html(Mhash.modes);
 							$('.content').addClass('slide-in').removeClass('slide-out');
 						}, 600);
+=======
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.canvas);
+							Mhash.dys.init();
+						}, 800);
+						//$('.content').html(Mhash.modes);
+>>>>>>> Stashed changes
 						
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
@@ -432,6 +440,7 @@
 					.on('click', '.rules', function(e){
 						$('#rulesModal').modal()
 					})
+<<<<<<< Updated upstream
 					
 					.on('click', '.easy', function(e){
 						console.log('Easy Mode has been Selected');
@@ -515,6 +524,8 @@
 								},2000);
 						}, 1250);
 					})	
+=======
+>>>>>>> Stashed changes
 					.on('gameOver', function(e){
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
