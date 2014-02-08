@@ -233,7 +233,8 @@
 				]
 				e_img = '/img/enemy.png',
 				framecount = 0,
-				num_forts = 0;
+				num_forts = 0,
+				isPwPrompt = false;
 
 			var init = function(results, pwds){
 				//This enables you to pass a js object
@@ -396,6 +397,12 @@
 					//Replace this if with your halt condition
 					//This can be replaced with a "while(true)", but this will have serious performance implications
 					framecount = framecount + 1;
+					var pwp = Math.random() < .1;
+					if(pwp){
+						isPrompt = true;
+						isPwPrompt = true;
+						$(document).trigger('passPrompt');
+					}
 					if(!defaults.isGameOver)
 					{       
 					  //Private animation loop functions
