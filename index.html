@@ -188,18 +188,18 @@
 			    this.pos.x += this.vel.x;
 			};
 
-			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
+			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3><h3 id='ttc'></h3></div></div><div class='row'><button type='submit' class='quit btn btn-success btn-lg padding-top clearfix center-block'>Back to Start</button>");
 			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 			Mhash.canvas= $.parseHTML("<div class='title'><h4>Test Your Might.</h4><h4>Hackers are always trying to obtain passwords. Are you ready?</h4></div><div class='canvas-container'><canvas id='game'></canvas></div>");
 			
 			Mhash.modes = $.parseHTML("<div class='title'><h4>Out of the last five sites that you have created accounts for, how many unique passwords have you created?</h4></div><div class='row'><button type='submit' data-difficulty='2' class='hard difficulty btn btn-default btn-lg padding-top clearfix center-block'>1</button><button type='submit' data-difficulty='1' class='medium difficulty btn btn-default btn-lg padding-top clearfix center-block'>3</button><button type='submit' data-difficulty='0' class='easy difficulty btn btn-default btn-lg padding-top clearfix center-block'>5</button></div>");
 			Mhash.passfields = $.parseHTML("<div class='row'><div class='col-md-2></div><div class='col-md-8'><form class='form' role='form' id='params'></form></div></div>");
-			
+			Mhash.test = $.parseHTML("<div class='row'><h2 class='center-block' style='width:50%;'>Test Your Password-Fu</h2></div><div class='row'><div class='col-md-2'></div><div class='col-md-6 col-md-offset-1'><form class='form' role='form'><input type='password' class='form-control' id='pw' placeholder='Password' style='min-width:25%;'><button type='submit' class='check-button btn btn-primary btn-lg padding-top clearfix center-block'>How Strong is My Password?</button></form></div></div>");
 			Mhash.params;
 			Mhash.pwfield = $.parseHTML("<input type='password' class='form-control param' placeholder='Password'>");
 			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
 			Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
-			Mhash.begin = $.parseHTML("<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>")
+			Mhash.begin = $.parseHTML("<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>");
 			Mhash.dys = (function(){
 
 			//Global paramters for your game loop
@@ -569,16 +569,19 @@
 					})
 					.on('click', '.check-button', function(e){
 						e.preventDefault();
-						console.log(zxcvbn($('#pw').val()));
+						var test = zxcvbn($('#pw').val());
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(Mhash.start);
-							$('.title').append(Mhash.lock);
+							$('.content').html(Mhash.results);
+							$('.fa-lock').css('display', '');
+							$('#entropy').html('Entropy (bits): ' + test.entropy);
+							$('#score').html('Relative score: ' + test.score);
+							$('#ttc').html('Estimated amount of time for existing software to crack password: ' + test.crack_time_display);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
-							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+							
 						}, 1250);
 
 					})
@@ -641,7 +644,6 @@
 						$('.content').addClass('slide-out');
 						setTimeout(function(){	
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(Mhash.passfields);
 							switch(difficulty){
 								case 0:
 									num_fields = 5
@@ -681,7 +683,7 @@
 									passField += "<div class='row'>" + icons[difficulty*5 + i-1] + "<div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><input type='password' class='form-control param center-block' id='password" + i + "' placeholder='Password #" + i + "'></div></div>";
 								passField += "<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>";
 								//$('.content').html(passField);
-								$('#params').html(passField);
+								$('.content').html(passField);
 								//$("#params").append($.parseHTML(passField));
 								//$("#params").append(Mhash.begin);
 						}, 800);
@@ -719,6 +721,20 @@
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 						}, 1250);
+					})
+					.on('click', '.start-check', function(e){
+						e.preventDefault();
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.test);
+							$('.lock').css('display', '');
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 800);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+						}, 1250);
 					});
 			});
 		</script>
@@ -735,7 +751,7 @@
 		        <span class="icon-bar"></span>
 		        <span class="icon-bar"></span>
 		      </button>
-		      <a class="navbar-brand" href="#">Password Checker</a>
+		      <a class="navbar-brand start-check" href="#">Password Checker</a>
 		    </div>
 
 		    <!-- Collect the nav links, forms, and other content for toggling -->
@@ -752,17 +768,16 @@
 		<main>
 			<div class="title">
 				<h3>Check Yo Password</h3>
+				<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>
 			</div>
 			<div class="container-fluid content">
-				<div class="row top-space">
-					<div class="col-md-2"></div>
-					<div class="col-md-6 col-md-offset-1">
-						<form class="form" role="form"> 
-						    <input type="password" class="form-control" id="pw" placeholder="Password" style="min-width:25%;">
-							<button type="submit" class="check-button btn btn-primary btn-lg padding-top clearfix center-block">How's My Password?</button>
-						</form>
-					</div>
-				</div>
+				"<div class='row'>
+					<button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>
+						Start
+					</button>
+					<button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>
+						Rules</button>
+					</div>"
 			</div>
 			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Rules</h4></div><div class='modal-body'>The goal of the game is to make sure that your fortresses are not defeated by space invaders (or in this case, passwords against hackers). <b>Your best offense is a strong defense</b>, so make sure to utilise strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Use common sense when choosing what password protects what service.</li><ul></div></div></div></div>
 			<div class='modal fade' id='deadModal' tabindex='-1' role='dialog' aria-labelledby='deadLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='deadLabel'>You've been hacked!</h4></div><div class='modal-body'>Despite your best efforts, your password has been compromised. Hackers have been able to successfully gain access to your account. <em id="deadHidden"></em></div></div></div></div>
