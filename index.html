@@ -480,11 +480,34 @@
 					})
 					.on('click', '.begin', function(e){
 						e.preventDefault();
+						var num_fields = 0,
+							pwords = [],
+							results = [];
+						switch(difficulty){
+							case 0:
+								num_fields = 5
+								break;
+							case 1:
+								num_fields = 3
+								break;
+							case 2:
+								num_fields = 1
+								break;
+							default:
+								break;
+						}
+						for (var i = 1; i <= num_fields; i++){
+							var pfield = '#easy' + i;
+							pwords.push($(pfield).val());
+						}
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.canvas);
-							console.log('hi');
+							for(var j = 0; j < pwords.length; j++){
+								results.push(zxcvbn(pwords[j]));
+							}
+							console.log(results);
 							Mhash.dys.init();
 						}, 800);
 						setTimeout(function(){
@@ -495,13 +518,11 @@
 					.on('click', '.difficulty', function(e){
 						e.preventDefault();
 						difficulty = parseInt($(e.target).data('difficulty'));
-						console.log(difficulty);
 						var num_fields = 0;
 						$('.content').addClass('slide-out');
 						setTimeout(function(){	
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.passfields);
-							console.log(difficulty);
 							switch(difficulty){
 								case 0:
 									num_fields = 5
