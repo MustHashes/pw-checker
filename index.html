@@ -56,7 +56,7 @@
 				border-radius: 30px;
 				min-width: 40%;
 			}
-			.medium, .easy, .begin{
+			.medium, .easy, .begin, .high-scores{
 				border-radius: 30px;
 				min-width: 40%;
 			}
@@ -197,8 +197,9 @@
 			Mhash.test = $.parseHTML("<div class='row'><h2 class='center-block' style='width:50%;'>Test Your Password-Fu</h2></div><div class='row'><div class='col-md-2'></div><div class='col-md-6 col-md-offset-1'><form class='form' role='form'><input type='password' class='form-control' id='pw' placeholder='Password' style='min-width:25%;'><button type='submit' class='check-button btn btn-primary btn-lg padding-top clearfix center-block'>How Strong is My Password?</button></form></div></div>");
 			Mhash.params;
 			Mhash.pwfield = $.parseHTML("<input type='password' class='form-control param' placeholder='Password'>");
-			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
+			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn btn-default btn-lg clearfix center-block padding-top high-scores'>High Scores</button></div>");
 			Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
+			Mhash.inform=$.parseHTML("<div class='row'><h3>So how well did you survive the digital jungle?</h3></div><div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3><h3 id='ttc'></h3></div></div>");
 			Mhash.begin = $.parseHTML("<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>");
 			Mhash.dys = (function(){
 
@@ -398,7 +399,7 @@
 					//This can be replaced with a "while(true)", but this will have serious performance implications
 					framecount = framecount + 1;
 					var pwp = Math.random() < .001;
-					if(pwp){
+					if(pwp && !isPwPrompt ){
 						isPrompt = true;
 						isPwPrompt = true;
 						$(document).trigger('passPrompt');
@@ -607,10 +608,10 @@
 						$('#rulesModal').modal()
 					})
 					.on('click', '.begin', function(e){
+						results = [];
 						e.preventDefault();
 						Mhash.dys.setGameOver(false);
-						var pwords = [],
-							results = [];
+						var pwords = [];
 						for(var k = 1; k <= num_fields; k++){
 							if ($('#password' + k).val() == ''){
 								window.alert("ERROR: Password #" + k + " can't be EMPTY!");
@@ -694,18 +695,38 @@
 					.on('gameOver', function(e){
 						e.preventDefault();
 						$('.content').addClass('slide-out');
+						var pass = 0,
+							score = 0;
+						console.log(this.results);
+						for(var i = 0; i < results.length; i++){
+							if (score < results[i].crack_time){
+								pass = i;
+							}
+						}
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.lock').css('display', '');
-							$('.content').html(Mhash.over);
+							$('.content').html(Mhash.inform);
+							$('#entropy').html('Entropy (bits): ' + results[i].entropy);
+							$('#score').html('Relative score: ' + results[i].score);
+							$('#ttc').html('Estimated amount of time for existing software to crack password: ' + results[i].crack_time_display);
+
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
 							Mhash.dys.setGameOver(true);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
-							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+						}, 1250);
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.over);
+							}, 800);
+						setTimeout(function(){
+							$('.content').addClass('slide-out');
 						}, 1250)
+						
 					})
 					.on('click', '.quit', function(e){
 						e.preventDefault();
