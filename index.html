@@ -240,6 +240,7 @@
 					e_img = '/img/enemy.png',
 					framecount = 0,
 					num_forts = 0,
+					z_results = [],
 					isPwPrompt = false;
 
 				var init = function(results, pwds){
@@ -266,6 +267,7 @@
 						}
 
 					    forts = [];
+					    z_results = results;
 					    num_forts = results.length;
 					    	//(180+(260*i), 750, 180, 0, Math.PI*2, true);
 					    switch(num_forts){
@@ -326,21 +328,21 @@
 									if(bullets[j].pos.y >= (forts[i].pos.y - forts[i].radius)){
 										if(bullets[j].pos.x >= forts[i].pos.x - forts[i].radius 
 											&& bullets[j].pos.x <= forts[i].pos.x + forts[i].radius){
-												if(forts[i].current_health >= 0){
+												if(forts[i].current_health > 0){
 													bullets.splice(j, 1);
 													forts[i].score();
 													if(forts[i].current_health <= 0){
 														num_dead = num_dead + 1;
 														if(num_dead == 1){
 															isPrompt = true;
-															if(num_dead == num_forts){
+															if(num_dead >= num_forts){
 															 	$(document).trigger('gameOver');
 															}
 															else{
 																$(document).trigger('hasDied');
 															}
 														}
-														else if(num_dead == num_forts){
+														else if(num_dead >= num_forts){
 															$(document).trigger('gameOver');
 														}					
 													}
@@ -518,6 +520,9 @@
 
 					var setPwPrompt = function(PwPrompt) {
 						isPwPrompt = PwPrompt;
+					};
+					var getResults = function(){
+						return z_results;
 					}
 
 					//This return statement should contain a js object
@@ -529,7 +534,8 @@
 						getGameOver: getGameOver,
 						setGameOver: setGameOver,
 						getPwPrompt: getPwPrompt,
-						setPwPrompt: setPwPrompt
+						setPwPrompt: setPwPrompt,
+						getResults: getResults
 					};	
 
 				})();
@@ -703,42 +709,23 @@
 						}, 1250);
 					})
 					.on('gameOver', function(e){
-						e.preventDefault();
 						Mhash.dys.setGameOver(true);
 						$('.content').addClass('slide-out');
-						var pass = 0,
-							score = 0;
-						console.log(this.results);
-						for(var i = 0; i < results.length; i++){
-							if (score < results[i].crack_time){
-								pass = i;
-							}
-						}
 						setTimeout(function(){
-							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').removeClass('slide-out');
+							$('.content').addClass('slide-in');
 							$('.lock').css('display', '');
-							$('.content').html(Mhash.inform);
-							$('#entropy').html('Entropy (bits): ' + results[i].entropy);
-							$('#score').html('Relative score: ' + results[i].score);
-							$('#ttc').html('Estimated amount of time for existing software to crack password: ' + results[i].crack_time_display);
+							$('.content').html(Mhash.over);
 
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
 							
-							initMhash();
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
+
+							initMhash();
 						}, 1250);
-						$('.content').addClass('slide-out');
-						setTimeout(function(){
-							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(Mhash.over);
-							}, 800);
-						setTimeout(function(){
-							$('.content').addClass('slide-out');
-						}, 1250)
-						
 					})
 					.on('click', '.quit', function(e){
 						e.preventDefault();
