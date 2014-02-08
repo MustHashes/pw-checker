@@ -200,7 +200,7 @@
 				Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 				Mhash.canvas= $.parseHTML("<div class='title'><h4>Test Your Might.</h4><h4>Hackers are always trying to obtain passwords. Are you ready?</h4></div><div class='canvas-container'><canvas id='game'></canvas></div>");
 				
-				Mhash.modes = $.parseHTML("<div class='title'><h4>Out of the last five sites that you have created accounts for, how many unique passwords have you created?</h4></div><div class='row'><button type='submit' data-difficulty='2' class='hard difficulty btn btn-default btn-lg padding-top clearfix center-block'>1</button><button type='submit' data-difficulty='1' class='medium difficulty btn btn-default btn-lg padding-top clearfix center-block'>3</button><button type='submit' data-difficulty='0' class='easy difficulty btn btn-default btn-lg padding-top clearfix center-block'>5</button></div>");
+				Mhash.modes = $.parseHTML("<div class='title'><h4>According to the Pew Research Center, 73 percent of adults online have social media accounts.</h4>  <h4>Of the five online services you use most often, how many unique passwords do you have among them?</h4></div><div class='row'><button type='submit' data-difficulty='2' class='hard difficulty btn btn-default btn-lg padding-top clearfix center-block'>1</button><button type='submit' data-difficulty='1' class='medium difficulty btn btn-default btn-lg padding-top clearfix center-block'>3</button><button type='submit' data-difficulty='0' class='easy difficulty btn btn-default btn-lg padding-top clearfix center-block'>5</button></div>");
 				Mhash.passfields = $.parseHTML("<div class='row'><div class='col-md-2></div><div class='col-md-8'><form class='form' role='form' id='params'></form></div></div>");
 				Mhash.test = $.parseHTML("<div class='row'><h2 class='center-block' style='width:50%;'>Test Your Password-Fu</h2></div><div class='row'><div class='col-md-2'></div><div class='col-md-6 col-md-offset-1'><form class='form' role='form'><input type='password' class='form-control' id='pw' placeholder='Password' style='min-width:25%;'><button type='submit' class='check-button btn btn-primary btn-lg padding-top clearfix center-block'>How Strong is My Password?</button></form></div></div>");
 				Mhash.params;
@@ -698,7 +698,7 @@
 								
 								
 								
-								var passField = "<div class='title'><h4>So you think you're secure? Suppose we have a similar situation. How many strong passwords can you think of?</h4><h5>Note: We do not send any passwords from the computer.</h5></div><div class='row top-space'></div>";
+								var passField = "<div class='title'><h4>So how well-guarded is your personal data against hackers? This game will simulate the current environment your data lives in with your current password habits.  Please choose unique, highly secure passwords and see how long you can last against our army of hackers!</h4><h5>Note: We do not send any passwords from the computer.</h5></div><div class='row top-space'></div>";
 								for(var i=1;i<=num_fields;i++)
 									passField += "<div class='row'>" + icons[difficulty*5 + i-1] + "<div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><input type='password' class='form-control param center-block' id='password" + i + "' placeholder='Password #" + i + "'></div></div>";
 								passField += "<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>";
@@ -790,7 +790,7 @@
 		</header>
 		<main>
 			<div class="title">
-				<h3>Check Yo Password</h3>
+				<h3>Don't Copy That Floppy (Password)!</h3>
 				<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>
 			</div>
 			<div class="container-fluid content">
@@ -802,7 +802,7 @@
 						Rules</button>
 					</div>"
 			</div>
-			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Rules</h4></div><div class='modal-body'>The goal of the game is to make sure that your fortresses are not defeated by space invaders (or in this case, passwords against hackers). <b>Your best offense is a strong defense</b>, so make sure to utilise strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Use common sense when choosing what password protects what service.</li><ul></div></div></div></div>
+			<div class='modal fade' id='rulesModal' tabindex='-1' role='dialog' aria-labelledby='rulesLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='rulesLabel'>Attack of the (Personal Data) Space Invaders!  Some rules:</h4></div><div class='modal-body'>Your personal data is under attack, and your defense is only as good as your weakest link (your password).  <b>Remember: your best offense is a strong defense</b>, so make sure to use strong passwords.<ul><li>Make sure it's sufficiently long.</li><li>It should contain a variety of characters.</li><li>Make sure you can <em>remember</em> it!</li><li>Most importantly, don't reuse passwords!</li><ul></div></div></div></div>
 			<div class='modal fade' id='deadModal' tabindex='-1' role='dialog' aria-labelledby='deadLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button><h4 class='modal-title' id='deadLabel'>You've been hacked!</h4></div><div class='modal-body'>Despite your best efforts, your password has been compromised. Hackers have been able to successfully gain access to your account. <em id="deadHidden"></em></div></div></div></div>
 			<div class='modal fade' id='passModal' data-keyboard='false' tabindex='-1' role='dialog' aria-labelledby='passLabel' aria-hidden='true'><div class='modal-dialog'><div class='modal-content'><div class='modal-header'><h4 class='modal-title' id='passLabel'>Reauthenticate</h4></div><div class='modal-body'>It's time to "re-login" again. Can you reauthenticate with the password for <code id="passId"></code>?<input type='password' class='form-control param' placeholder='Password'><button class="btn btn-default btnLogin" type="submit">Login</button></div></div></div></div>
 		</main>
