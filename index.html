@@ -145,7 +145,7 @@
 			
 			Mhash.params;
 			Mhash.pwfield = $.parseHTML("<input type='password' class='form-control param' placeholder='Password'>");
-			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
+			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1><p>You've managed to last <b id='score'></b> seconds before your passwords were cracked.</p><br/><p>Remember, your passwords are only as strong as your weakest link. <b>Take some time every so often to make sure you and your family and friends are secure.</b></p><br/><p>The amount of seconds are that it took for the game to end are not random; <b>they are based on the strength and reuse of your passwords</b>.</p><p>A warning: This game was designed to mimic real life hacking, and while the time needed to hack are slightly exaggerated, they are not impossible.</p></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
 			Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
 			Mhash.begin = $.parseHTML("<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>")
 			Mhash.dys = (function(){
