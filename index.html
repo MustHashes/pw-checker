@@ -151,9 +151,9 @@
 				    	default:
 				    		break;
 				    }
-				    var firstPos = {
-				    	x : (canvas.width / 5 )/2,
-				    	y: canvas.height - 100
+				    var pos = {
+				    	x : 130,
+				    	y: 700
 				    }
 				    drawing1 = new Image();
 					drawing1.src = imgs[0];
@@ -165,13 +165,19 @@
 					drawing4.src = imgs[3];
 					drawing5 = new Image();
 					drawing5.src = imgs[4];
-				    context.drawImage(drawing1,130,500, 100, 100);
-				    context.drawImage(drawing2,410,500, 100, 100);
-				    context.drawImage(drawing3,700,500, 100, 100);
-				    context.drawImage(drawing4,980,500, 100, 100);
-				    context.drawImage(drawing5,1270,500, 100, 100);
+				    context.drawImage(drawing1,pos.x,pos.y, 100, 100);
+				    context.drawImage(drawing2,pos.x + 260,pos.y, 100, 100);
+				    context.drawImage(drawing3,pos.x + 520,pos.y, 100, 100);
+				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
+				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
 				    isMenu = true;
 				    console.log("it got here!");
+
+				    context.beginPath();
+				    context.fillStyle = '#000000';
+					context.arc(180, 750, 100, 0, Math.PI*2, true);
+					context.stroke(); 
+					context.closePath();
 
 				    //run(e);
 				};
