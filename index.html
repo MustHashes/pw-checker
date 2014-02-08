@@ -116,6 +116,7 @@
 				this.color.r = 42;
 				this.color.g = 186;
 				this.color.b = 39;
+				this.color.a = 1;
 
 			};
 			Mhash.Fort.prototype.score = function(){
@@ -123,20 +124,23 @@
 				this.count = this.count + 1;
 				var ratio = this.current_health/this.max_health;
 				console.log(ratio);
-				if (ratio >= .66){
+				if (ratio >= .90){
 					this.color.r = 42;
 					this.color.g = 186;
 					this.color.b = 39;
+					this.color.a = 1;
 				}
-				else if (ratio >= .1){
+				else if (ratio >= .65){
 					this.color.r = 232;
 					this.color.g = 210;
 					this.color.b = 52;
+					this.color.a = .25;
 				}
 				else{
 					this.color.r = 255;
-					this.color.g = 0;
-					this.color.b = 0;
+					this.color.g = 255;
+					this.color.b = 255;
+					this.color.a = .05;
 				}
 
 			}
@@ -203,8 +207,10 @@
 				width: 0,
 				passwords: 0,
 				isGameplay: false,
-				isMenu: false,
-				isGameOver: false},
+				isMenu: false},
+				isGameOver = false,
+				isPrompt = false,
+				num_dead = 0,
 				canvas,
 				context,
 				$container,
@@ -295,30 +301,38 @@
 						context.stroke(); 
 						context.closePath();
 					}*/
-					for(var i = 0; i < num_forts; i++){
-				   		context.strokeStyle = "rgb(" + forts[i].color.r + "," + forts[i].color.g + ","+ forts[i].color.b +")";
-				   		console.log(context.strokeStyle);
-      					context.lineWidth = 10;
-						context.beginPath();
-						context.arc(forts[i].pos.x, forts[i].pos.y, forts[i].radius, 0, Math.PI*2, true);
-						context.stroke(); 
-						context.closePath();
-					}
 				    run();
 				};
 
 				var updateBullets = function(){
 					for (var j = 0; j < bullets.length; j++){
-						bullets[j].move();
-						for(var i = 0; i < forts.length; i++){
-							if(bullets[j].pos.y >= (forts[i].pos.y - forts[i].radius)){
-								if(bullets[j].pos.x >= forts[i].pos.x - forts[i].radius 
-									&& bullets[j].pos.x <= forts[i].pos.x + forts[i].radius){
-										if(forts[i].current_health >= 0){
-											bullets.splice(j, 1);
-											forts[i].score();
-											break;
-										}
+							if(!isPrompt){
+								bullets[j].move();
+							for(var i = 0; i < forts.length; i++){
+								if(bullets[j].pos.y >= (forts[i].pos.y - forts[i].radius)){
+									if(bullets[j].pos.x >= forts[i].pos.x - forts[i].radius 
+										&& bullets[j].pos.x <= forts[i].pos.x + forts[i].radius){
+											if(forts[i].current_health >= 0){
+												bullets.splice(j, 1);
+												forts[i].score();
+												if(forts[i].current_health <= 0){
+													num_dead = num_dead + 1;
+													if(num_dead == 1){
+														isPrompt = true;
+														if(num_dead == num_forts){
+														 	$(document).trigger('gameOver');
+														}
+														else{
+															$(document).trigger('hasDied');
+														}
+													}
+													else if(num_dead == num_forts){
+														$(document).trigger('gameOver');
+													}					
+												}
+												break;
+											}
+									}
 								}
 							}
 						}
@@ -448,7 +462,7 @@
 				    isMenu = true;
       				context.lineWidth = 10;
 				    for(var i = 0; i < num_forts; i++){
-				   		context.strokeStyle = "rgb(" + forts[i].color.r + "," + forts[i].color.g + ","+ forts[i].color.r +")";
+				   		context.strokeStyle = "rgba(" + forts[i].color.r + "," + forts[i].color.g + ","+ forts[i].color.b +"," + forts[i].color.a + ")";
       					context.lineWidth = 10;
 						context.beginPath();
 						context.arc(forts[i].pos.x, forts[i].pos.y, forts[i].radius, 0, Math.PI*2, true);
@@ -473,13 +487,16 @@
 					canvas.width = canvas.width;
 				};
 
+				var clearPrompt = function(){
+					isPrompt = false;
+				};
 
 				//This return statement should contain a js object
 				//of every "public" function for your module
 				return{
-					init: init
+					init: init,
+					clearPrompt: clearPrompt
 				};	
-
 
 			})();
 
@@ -489,7 +506,12 @@
 					result = {},
 					difficulty = 0,
 					num_fields;
-					$this.on('click', '.check-button', function(e){
+					$this.on('hasDied', function(e){
+						e.preventDefault();
+						console.log('first death');
+						Mhash.dys.clearPrompt();
+					})
+					.on('click', '.check-button', function(e){
 						e.preventDefault();
 						console.log(zxcvbn($('#pw').val()));
 						$('.content').addClass('slide-out');
