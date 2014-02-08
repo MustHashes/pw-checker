@@ -307,6 +307,62 @@
 					.on('click', '.rules', function(e){
 
 					})
+					
+					.on('click', '.easy', function(e){
+						console.log('Easy Mode has been Selected');
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							//$('.lock').css('display', 'none');
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(/*Mhash.canvas*/);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+								setTimeout(function(){
+									//$this.trigger('gameOver');
+								},2000);
+						}, 1250);
+						
+					})
+					.on('click', '.medium', function(e){
+						console.log('Medium Mode has been Selected');
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							//$('.lock').css('display', 'none');
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(/*Mhash.canvas*/);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+								setTimeout(function(){
+									//$this.trigger('gameOver');
+								},2000);
+						}, 1250);
+					})
+					.on('click', '.hard', function(e){
+						console.log('Hard Mode has been Selected');
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							//$('.lock').css('display', 'none');
+							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(/*Mhash.canvas*/);
+							//$('#entropy').html('Entropy: ' + result.entropy);
+							//$('#score').html('Score: ' + result.score);
+						}, 600);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+								setTimeout(function(){
+									//$this.trigger('gameOver');
+								},2000);
+						}, 1250);
+					})	
 					.on('gameOver', function(e){
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
