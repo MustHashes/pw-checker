@@ -100,7 +100,7 @@
 
 				this.img = img;
 			};
-			Mhash.Bullet = function(pos, target, vel, marker, usePhysics) {
+			Mhash.Bullet = function(pos, target, vel, usePhysics) {
 				  // properties for animation
 				  // and colouring
 				  this.GRAVITY  = 0.06;
@@ -110,6 +110,10 @@
 				    y: pos.y || 0
 				  };
 
+				  this.lastPos = {
+				    x: this.pos.x,
+				    y: this.pos.y
+				  };
 				  this.vel = {
 				    x: vel.x || 10,
 				    y: vel.y || 10
@@ -120,14 +124,19 @@
 				    y: this.pos.y
 				  };
 
-				  this.target = {
-				    y: 0
-				  };
-				  this.color = "#ccc";
-
 				  this.usePhysics = usePhysics || false;
 
 			};
+			Mhash.Bullet.prototype.move = function(){
+			    this.lastPos.x = this.pos.x;
+			    this.lastPos.y = this.pos.y;
+
+			    this.vel.y += this.GRAVITY;
+			    this.pos.y += this.vel.y;
+
+			    this.pos.x += this.vel.x;
+			};
+
 			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
 			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 			Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
@@ -190,10 +199,22 @@
 				    		temp.x = 300 + (300 * i);
 							temp.y = 100;
 				    	enemies[i] = new Mhash.Enemy(temp, e_img);
-				    	for (var j = 0; j < 100; j++){
-				    		enemies[i][j]
-				    	}
-				    }
+				    	
+					    var count = 100;
+					    var angle = (Math.PI) / count;
+
+					    while(count--) {
+					        var randomVelocity =  5;
+					        var particleAngle = angle;
+
+					        bullets[100-count-1] = new Bullet(
+					            {x:enemies[i].pos.x+100, y:enemies[i].pos.y+200}, null,
+					            {
+					            x: Math.cos(particleAngle) * randomVelocity,
+					            y: Math.sin(particleAngle) * randomVelocity
+					            }, false);
+						}
+					}
 
 				    forts = [];
 				    var num_forts = 1,
@@ -246,35 +267,21 @@
 				    run();
 				};
 
-				var plotParticles = function(){
-					var currentParticles = [];
-			          for (var i = 0; i < particles.length; i++) {
-			            var particle = particles[i];
-			            var pos = particle.pos;
-			         
-			            // If we're out of bounds, drop this particle and move on to the next
-			            if (pos.x <= 100 || pos.x >= canvas.width || pos.y <= 0 || pos.y >= canvas.height){
-			                continue;
-			            } 
-			            else{
-			                 // Move our particles
-			            particle.move();
-			         
-			            // Add this particle to the list of current particles
-			            currentParticles.push(particle);
-			          }
-			         
-			          // Update our global particles, clearing room for old particles to be collected   
-			        }      
-			        particles = currentParticles;
+				var updateBullets = function(){
+					for(var i = 0; i < 3; i++){
+						var current = enemies[i];
+						for(var j = 0; j < current.bullets.length; j++){
+							current.bullets[j].move();
+						}
+					}
 				};
-
-				var drawParticles = function(){
-					for (var i = 0; i < particles.length; i++) {
-			            context.fillStyle = particles[i].color;
-			            var position = particles[i].pos;
-			            context.fillRect(position.x, position.y, 4, 4);
-			        }
+				var drawBullets = function(){
+					for(var i = 0; i < 3; i++){
+						var current = enemies[i];
+						for(var j = 0; j < current.bullets.length; j++){
+							current.bullets[j].move();
+						}
+					}
 				};
 
 				var run = function(){
@@ -307,8 +314,7 @@
 			    var update = function() {
 			        //define position updating logic here
 			        
-			        //update enemy weapon particle position
-
+			        updateBullets();
 			        //update target health
 
 			        //generate random events? 
@@ -317,7 +323,7 @@
 
 			    // returns health to decrease (either random compromise)
 			    // or the portion of maxhealth to kill kill kill
-			    var calculate = function(seconds, totalhits) {0
+			    var calculate = function(seconds, totalhits) {
 			    	if (Math.random() < 0.01 * seconds/100) {
 			    		// random compromise
 			    	}
@@ -328,15 +334,15 @@
 			    };
 
 				var draw = function() {
-				  //define image drawing (read: context updating) logic here
-				  
-				  //Draw all objects in current context (menu, gameplay, etc.)
+				  	//define image drawing (read: context updating) logic here
+
+				  	//Draw all objects in current context (menu, gameplay, etc.)
 
 				    var pos = {
 				    	x : 130,
 				    	y: 700
 				    };
-				  drawing1 = new Image();
+				  	drawing1 = new Image();
 					drawing1.src = imgs[0];
 					drawing2 = new Image();
 					drawing2.src = imgs[1];
@@ -368,6 +374,7 @@
 						enemy.src = enemies[i].img;
 						context.drawImage(enemy, enemies[i].pos.x, enemies[i].pos.y, 200, 200);
 				    }
+				    drawBullets();
 					console.log('animating');
 
 
