@@ -76,6 +76,43 @@
 		})();
 
 			var Mhash = {};
+			Mhash.Enemy = function(pos, img){
+				this.bullets = [];
+
+				this.pos = {};
+				this.pos.x = pos.x || 0;
+				this.pos.y = pos.y || 0;
+
+				this.img = img;
+			};
+			Mhash.Bullet = function(pos, target, vel, marker, usePhysics) {
+				  // properties for animation
+				  // and colouring
+				  this.GRAVITY  = 0.06;
+
+				  this.pos = {
+				    x: pos.x || 0,
+				    y: pos.y || 0
+				  };
+
+				  this.vel = {
+				    x: vel.x || 10,
+				    y: vel.y || 10
+				  };
+
+				  this.lastPos = {
+				    x: this.pos.x,
+				    y: this.pos.y
+				  };
+
+				  this.target = {
+				    y: 0
+				  };
+				  this.color = "#ccc";
+
+				  this.usePhysics = usePhysics || false;
+
+			};
 			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
 			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 			Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
@@ -134,6 +171,13 @@
 
 			    //Start event loop
 				    enemies = [];
+				    for(var i = 0; i < 3; i++){
+				    	var temp = {};
+				    		temp.x = 300 + (300 * i);
+							temp.y = 100;
+				    	enemies[i] = new Mhash.Enemy(temp, e_img);
+				    }
+
 				    forts = [];
 				    var num_forts = 1,
 				    	num_icons = 5;
@@ -182,15 +226,6 @@
 						context.closePath();
 					}
 
-					enemy1 = new Image();
-					enemy1.src = e_img;
-					context.drawImage(enemy1, 300, 100, 200, 200);
-					enemy2 = new Image();
-					enemy2.src = e_img;
-					context.drawImage(enemy2, 600, 100, 200, 200);
-					enemy3 = new Image();
-					enemy3.src = e_img;
-					context.drawImage(enemy3, 900, 100, 200, 200);
 				    run();
 				};
 
@@ -295,16 +330,14 @@
 						context.stroke(); 
 						context.closePath();
 					}
+					for(var i = 0; i < 3; i++){
+				    	enemy = new Image();	
+						enemy.src = enemies[i].img;
+						context.drawImage(enemy, enemies[i].pos.x, enemies[i].pos.y, 200, 200);
+				    }
+					console.log('animating');
 
-					enemy1 = new Image();
-					enemy1.src = e_img;
-					context.drawImage(enemy1, 300, 100, 200, 200);
-					enemy2 = new Image();
-					enemy2.src = e_img;
-					context.drawImage(enemy2, 600, 100, 200, 200);
-					enemy3 = new Image();
-					enemy3.src = e_img;
-					context.drawImage(enemy3, 900, 100, 200, 200);
+
 				};
 
 				var clear = function(){
