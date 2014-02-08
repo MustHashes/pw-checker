@@ -166,16 +166,15 @@
 			    context = canvas.getContext("2d");
 
 			    //Initialize enemies
-
-			    //Initialize targets
-
-			    //Start event loop
 				    enemies = [];
 				    for(var i = 0; i < 3; i++){
 				    	var temp = {};
 				    		temp.x = 300 + (300 * i);
 							temp.y = 100;
 				    	enemies[i] = new Mhash.Enemy(temp, e_img);
+				    	for (var j = 0; j < 100; j++){
+				    		enemies[i][j]
+				    	}
 				    }
 
 				    forts = [];
@@ -330,6 +329,9 @@
 						context.stroke(); 
 						context.closePath();
 					}
+
+					//Dynamically update enemies!
+
 					for(var i = 0; i < 3; i++){
 				    	enemy = new Image();	
 						enemy.src = enemies[i].img;
@@ -360,29 +362,29 @@
 					result = {};
 					$this.on('click', '.check-button', function(e){
 						e.preventDefault();
-						result = zxcvbn($('#pw').val());
+						console.log(zxcvbn($('#pw').val()));
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.start);
 							$('.title').append(Mhash.lock);
-							//$('#entropy').html('Entropy: ' + result.entropy);
-							//$('#score').html('Score: ' + result.score);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
 						}, 1250);
+
 					})
 					.on('click', '.start', function(e){
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.lock').css('display', 'none');
+							$('.content').html(Mhash.canvas);
+							Mhash.dys.init();
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
-						}, 600);
-						$('.content').html(Mhash.canvas);
+						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
@@ -390,7 +392,6 @@
 								//	$this.trigger('gameOver');
 								//},2000);
 						}, 1250);
-						Mhash.dys.init();
 					})
 					.on('click', '.rules', function(e){
 						$('#rulesModal').modal()
