@@ -323,7 +323,7 @@
 
 			    // returns health to decrease (either random compromise)
 			    // or the portion of maxhealth to kill kill kill
-			    var calculate = function(seconds, totalhits) {0
+			    var calculate = function(seconds, totalhits) {
 			    	if (Math.random() < 0.01 * seconds/100) {
 			    		// random compromise
 			    	}
@@ -334,15 +334,15 @@
 			    };
 
 				var draw = function() {
-				  //define image drawing (read: context updating) logic here
-				  
-				  //Draw all objects in current context (menu, gameplay, etc.)
+				  	//define image drawing (read: context updating) logic here
+
+				  	//Draw all objects in current context (menu, gameplay, etc.)
 
 				    var pos = {
 				    	x : 130,
 				    	y: 700
 				    };
-				  drawing1 = new Image();
+				  	drawing1 = new Image();
 					drawing1.src = imgs[0];
 					drawing2 = new Image();
 					drawing2.src = imgs[1];
