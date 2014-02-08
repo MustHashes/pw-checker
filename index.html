@@ -135,7 +135,7 @@
 				    forts = [];
 				    var num_forts = 1,
 				    	num_icons = 5;
-				    switch (difficulty){
+				    switch (defaults.difficulty){
 				    	case 0: 
 				    		num_forts = 5;
 				    		num_icons = 1;
@@ -152,14 +152,14 @@
 				    		break;
 				    }
 				    var firstPos = {
-				    	x : (canvas.width() / 5 )/2,
-				    	y: canvas.height() - 100
+				    	x : (canvas.width / 5 )/2,
+				    	y: canvas.height - 100
 				    }
 				    for (var j = 0; j < 5; j++){
 				    	drawing = new Image();
 						drawing.src = imgs[j];
 						context.drawImage(drawing,firstPos.x,firstPos.y);
-				    	firstPos.x = firstPos.x + (canvas.width() / 5);
+				    	firstPos.x = firstPos.x + (canvas.width / 5);
 				    	
 				    }
 				    isMenu = true;
@@ -283,10 +283,10 @@
 						setTimeout(function(){
 							$('.lock').css('display', 'none');
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(Mhash.canvas);
 							//$('#entropy').html('Entropy: ' + result.entropy);
 							//$('#score').html('Score: ' + result.score);
 						}, 600);
+						$('.content').html(Mhash.canvas);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
