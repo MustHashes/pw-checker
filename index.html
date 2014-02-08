@@ -156,7 +156,7 @@
 				    var pos = {
 				    	x : 130,
 				    	y: 700
-				    }
+				    };
 				    drawing1 = new Image();
 					drawing1.src = imgs[0];
 					drawing2 = new Image();
@@ -191,7 +191,7 @@
 					enemy3 = new Image();
 					enemy3.src = e_img;
 					context.drawImage(enemy3, 900, 100, 200, 200);
-				    //run(e);
+				    run();
 				};
 
 				var plotParticles = function(){
@@ -224,14 +224,12 @@
 			            context.fillRect(position.x, position.y, 4, 4);
 			        }
 				};
-				var initRun = function(e){
-					run(e);
-				}
 
-				var run = function(e){
+				var run = function(){
 					//Replace this if with your halt condition
 					//This can be replaced with a "while(true)", but this will have serious performance implications
-					if(!isGameOver)
+					
+					if(!defaults.isGameOver)
 					{       
 					  //Private animation loop functions
 
@@ -268,6 +266,45 @@
 				  //define image drawing (read: context updating) logic here
 				  
 				  //Draw all objects in current context (menu, gameplay, etc.)
+
+				    var pos = {
+				    	x : 130,
+				    	y: 700
+				    };
+				  drawing1 = new Image();
+					drawing1.src = imgs[0];
+					drawing2 = new Image();
+					drawing2.src = imgs[1];
+					drawing3 = new Image();
+					drawing3.src = imgs[2];
+					drawing4 = new Image();
+					drawing4.src = imgs[3];
+					drawing5 = new Image();
+					drawing5.src = imgs[4];
+				    context.drawImage(drawing1,pos.x,pos.y, 100, 100);
+				    context.drawImage(drawing2,pos.x + 260,pos.y, 100, 100);
+				    context.drawImage(drawing3,pos.x + 520,pos.y, 100, 100);
+				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
+				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
+				    isMenu = true;
+				    context.strokeStyle = 'rgb(0,255,0)';
+      				context.lineWidth = 10;
+				    for(var i = 0; i<5; i++){
+					    context.beginPath();
+						context.arc(180+(260*i), 750, 100, 0, Math.PI*2, true);
+						context.stroke(); 
+						context.closePath();
+					}
+
+					enemy1 = new Image();
+					enemy1.src = e_img;
+					context.drawImage(enemy1, 300, 100, 200, 200);
+					enemy2 = new Image();
+					enemy2.src = e_img;
+					context.drawImage(enemy2, 600, 100, 200, 200);
+					enemy3 = new Image();
+					enemy3.src = e_img;
+					context.drawImage(enemy3, 900, 100, 200, 200);
 				};
 
 				var clear = function(){
