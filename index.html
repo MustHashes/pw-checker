@@ -148,6 +148,7 @@
 			Mhash.pwfield = $.parseHTML("<input type='password' class='form-control param' placeholder='Password'>");
 			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
 			Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
+			Mhash.begin = $.parseHTML("<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>")
 			Mhash.dys = (function(){
 
 			//Global paramters for your game loop
@@ -434,7 +435,7 @@
 					.on('click', '.rules', function(e){
 						$('#rulesModal').modal()
 					})
-					.on('click', '.submit', function(e){
+					.on('click', '.begin', function(e){
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
@@ -452,6 +453,7 @@
 						$('.content').addClass('slide-out');
 						setTimeout(function(){	
 							$('.content').addClass('slide-in').removeClass('slide-out');
+							$('.content').html(Mhash.passfields);
 							switch(difficulty){
 								case 0:
 									num_fields = 5
@@ -468,6 +470,7 @@
 								for(var i = 0; i < num_fields; i++){
 									$('#params').append(Mhash.pwfield);
 								}
+								$("#params").append(Mhash.begin);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
