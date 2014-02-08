@@ -15,8 +15,7 @@
 				}
 			}
 			.canvas-container{
-				background: transparent;
-				opacity: .5;
+				background: #333;
 				box-shadow: 1px 5px 4px 4px #ccc;
 				min-height: 60%;
 				max-width: 80%;
@@ -107,11 +106,12 @@
 				targets = [],
 				imgs = [
 				'/img/icons/no border/facebook500.png',
-				'/img/icons/no border/googleplus.png',
+				'/img/icons/no border/googleplus-revised.png',
 				'/img/icons/no border/twitter.png',
 				'/img/icons/no border/email.png',
 				'/img/icons/no border/instagram.png',
-				];
+				]
+				e_img = '/img/enemy.png';
 
 			var init = function(params){
 				//This enables you to pass a js object
@@ -173,14 +173,24 @@
 				    context.drawImage(drawing4,pos.x + 780,pos.y, 100, 100);
 				    context.drawImage(drawing5,pos.x + 1040,pos.y, 100, 100);
 				    isMenu = true;
-				    console.log("it got here!");
+				    context.strokeStyle = 'rgb(0,255,0)';
+      				context.lineWidth = 10;
+				    for(var i = 0; i<5; i++){
+					    context.beginPath();
+						context.arc(180+(260*i), 750, 100, 0, Math.PI*2, true);
+						context.stroke(); 
+						context.closePath();
+					}
 
-				    context.beginPath();
-				    context.fillStyle = '#000000';
-					context.arc(180, 750, 100, 0, Math.PI*2, true);
-					context.stroke(); 
-					context.closePath();
-
+					enemy1 = new Image();
+					enemy1.src = e_img;
+					context.drawImage(enemy1, 300, 100, 200, 200);
+					enemy2 = new Image();
+					enemy2.src = e_img;
+					context.drawImage(enemy2, 600, 100, 200, 200);
+					enemy3 = new Image();
+					enemy3.src = e_img;
+					context.drawImage(enemy3, 900, 100, 200, 200);
 				    //run(e);
 				};
 
