@@ -479,11 +479,23 @@
 									$('#params').append($(Mhash.pwfield));
 									<input type='password' class='form-control param' placeholder='Password'>
 								}*/
+								var icons = ["<img height='35' width='35' src='/img/icons/no border/facebook500.png' alt='facebook' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/googleplus-revised.png' alt='g+' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/twitter.png' alt='twitter' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/email.png' alt='email' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/instagram.png' alt='instagram' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/facebook500.png' alt='facebook' class='img-circle'><img style='margin-left: 0.25%;' height='35' width='35' src='/img/icons/no border/googleplus-revised.png' alt='g+' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/twitter.png' alt='twitter' class='img-circle'>",
+											"<img height='35' width='35' src='/img/icons/no border/email.png' alt='email' class='img-circle'><img style='margin-left: 0.25%;' height='35' width='35' src='/img/icons/no border/instagram.png' alt='instagram' class='img-circle'>",
+											" ",
+											" ",
+											"<img height='35' width='35' src='/img/icons/no border/facebook500.png' alt='facebook' class='img-circle'><img style='margin-left: 0.25%;' height='35' width='35' src='/img/icons/no border/googleplus-revised.png' alt='g+' class='img-circle'><img style='margin-left: 0.25%;' height='35' width='35' src='/img/icons/no border/twitter.png' alt='twitter' class='img-circle'><img style='margin-left: 0.25%;' height='35' width='35' src='/img/icons/no border/email.png' alt='email' class='img-circle'><img style='margin-left: 0.25%;' height='35' width='35' src='/img/icons/no border/instagram.png' alt='instagram' class='img-circle'>"];
+								
 								
 								
 								var passField = "<div class='row top-space'></div>";
 								for(var i=1;i<=num_fields;i++)
-									passField += "<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy" + i + "'></label><input type='password' class='form-control param center-block' id='easy" + i + "' placeholder='Password #" + i + "'></div></div>";
+									passField += "<div class='row'>" + icons[difficulty*5 + i-1] + "<div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><input type='password' class='form-control param center-block' id='easy" + i + "' placeholder='Password #" + i + "'></div></div>";
 								$("#params").append($.parseHTML(passField));
 								$("#params").append(Mhash.begin);
 						}, 800);
