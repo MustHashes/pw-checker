@@ -481,39 +481,8 @@
 					})
 					.on('click', '.begin', function(e){
 						e.preventDefault();
-						var num_fields = 0,
-							pwords = [],
+						var pwords = [],
 							results = [];
-						switch(difficulty){
-							case 0:
-								num_fields = 5
-								break;
-							case 1:
-								num_fields = 3
-								break;
-							case 2:
-								num_fields = 1
-								break;
-							default:
-								break;
-						}
-						for (var i = 1; i <= num_fields; i++){
-							var pfield = '#easy' + i;
-							pwords.push($(pfield).val());
-						}
-						$('.content').addClass('slide-out');
-						setTimeout(function(){
-							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(Mhash.canvas);
-							for(var j = 0; j < pwords.length; j++){
-								results.push(zxcvbn(pwords[j]));
-							}
-							console.log(results);
-							Mhash.dys.init();
-						}, 800);
-						setTimeout(function(){
-							$('.content').removeClass('slide-in');
-						}, 1250);
 						for(var k = 1; k <= num_fields; k++){
 							if ($('#password' + k).val() == ''){
 								window.alert("ERROR: Password #" + k + " can't be EMPTY!");
@@ -521,22 +490,29 @@
 							}
 							//console.log($('#password' + k).val());
 						}
+						
 						if(k > num_fields){
-							$('.content').addClass('slide-out');
-								setTimeout(function(){
-									$('.content').addClass('slide-in').removeClass('slide-out');
-									$('.content').html(Mhash.canvas);
-									Mhash.dys.init();
-								}, 800);
-								setTimeout(function(){
-									$('.content').removeClass('slide-in');
-								}, 1250);
+							for (var i = 1; i <= num_fields; i++){
+								pwords.push($('#password' + i).val());
 							}
+							$('.content').addClass('slide-out');
+							setTimeout(function(){
+								$('.content').addClass('slide-in').removeClass('slide-out');
+								$('.content').html(Mhash.canvas);
+								for(var j = 0; j < pwords.length; j++){
+									results.push(zxcvbn(pwords[j]));
+								}
+								console.log(results);
+								Mhash.dys.init();
+							}, 800);
+							setTimeout(function(){
+								$('.content').removeClass('slide-in');
+							}, 1250);
+						}
 					})
 					.on('click', '.difficulty', function(e){
 						e.preventDefault();
 						difficulty = parseInt($(e.target).data('difficulty'));
-						var num_fields = 0;
 						console.log(difficulty);
 						num_fields = 0;
 						$('.content').addClass('slide-out');
