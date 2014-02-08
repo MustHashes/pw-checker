@@ -9,7 +9,7 @@
 
 
 			@media screen and (max-width: 500px){
-				.start, .rules, .quit{
+				.start, .rules, .quit, .hard, .medium, .easy, .submit{
 				border-radius: 30px;
 				min-width: 80%;
 				}
@@ -50,6 +50,21 @@
 				border-radius: 30px;
 				min-width: 40%;
 			}
+			
+			.hard{
+				margin-top: 12%;
+				border-radius: 30px;
+				min-width: 40%;
+			}
+			.medium, .easy, .submit{
+				border-radius: 30px;
+				min-width: 40%;
+			}
+			
+			.top-space{
+				margin-top: 8%;
+			}
+			
 			.target{
 				margin-right: 5%;
 				width: 90px;
@@ -125,7 +140,10 @@
 			Mhash.results = $.parseHTML("<div class='row' id='results'><div class='col-md-2'></div><div class='col-md-8'><h3 id='entropy'></h3><h3 id='score'></h3></div></div>");
 			Mhash.start = $.parseHTML("<div class='row'><button type='submit' class='start btn btn-success btn-lg padding-top clearfix center-block'>Start</button><button type='submit' class='rules btn btn-info btn-lg padding-top clearfix center-block'>Rules</button></div>");
 			Mhash.canvas= $.parseHTML("<div class='canvas-container'><canvas id='game'></canvas></div>");
-
+			
+			Mhash.modes = $.parseHTML("<div class='row'><button type='submit' class='hard btn btn-danger btn-lg padding-top clearfix center-block'>Hard</button><button type='submit' class='medium btn btn-warning btn-lg padding-top clearfix center-block'>Medium</button><button type='submit' class='easy btn btn-success btn-lg padding-top clearfix center-block'>Easy</button></div>");
+			Mhash.easyPassword = $.parseHTML("<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div><div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy1'></label><input type='password' class='form-control center-block' id='easy1' placeholder='Password #1'></div></div>");
+			
 			Mhash.params;
 			Mhash.over=$.parseHTML("<div class='row'><div class='col-md-2'></div><div class='col-md-8'><h1 class='center-block text-center'>Game Over</h1></div></div><div class='row'><div class='col-md-4'></div><div class='col-md-4'><button class='btn start btn-default center-block'>Try Again?</button><button class='btn quit btn-danger center-block padding-top'>Quit</button></div></div>");
 			Mhash.lock = $.parseHTML("<h3 class='lock'><i class='fa fa-lock lock fa-6'></i></h3>");
@@ -303,11 +321,14 @@
 
 			    // returns health to decrease (either random compromise)
 			    // or the portion of maxhealth to kill kill kill
-			    var calculate = function(currentLevel, maxHealth, score) {
-			    	if (Math.random() < 0.01 * currentLevel) {
+			    var calculate = function(seconds, totalhits) {0
+			    	if (Math.random() < 0.01 * seconds/100) {
 			    		// random compromise
 			    	}
-			    	return maxHealth / (score + 1);
+			    	
+			    	// square totalhits on the obj, then take away said totalhits
+			    	// from maxHealth
+			    	return totalhits^2;
 			    };
 
 				var draw = function() {
@@ -396,9 +417,10 @@
 							$('.content').html(Mhash.canvas);
 							Mhash.dys.init();
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							//$('#entropy').html('Entropy: ' + result.entropy);
-							//$('#score').html('Score: ' + result.score);
-						}, 800);
+						}, 600);
+						$('.content').html(Mhash.modes);
+						//$('.content').html(Mhash.canvas);
+						
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
@@ -415,12 +437,15 @@
 						console.log('Easy Mode has been Selected');
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
-							//$('.lock').css('display', 'none');
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(/*Mhash.canvas*/);
-							//$('#entropy').html('Entropy: ' + result.entropy);
-							//$('#score').html('Score: ' + result.score);
 						}, 600);
+						
+						var passField = "<div class='row top-space'></div>";
+						for(var i=1;i<=5;i++)
+							passField += "<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy" + i + "'></label><input type='password' class='form-control center-block' id='easy" + i + "' placeholder='Password #" + i + "'></div></div>";
+						passField += "<div class='row'><button type='submit' class='submit btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>";
+						$('.content').html($.parseHTML(passField));
+
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
@@ -430,16 +455,35 @@
 						}, 1250);
 						
 					})
+					.on('click', '.submit', function(e){
+						$('.content').addClass('slide-out');
+						setTimeout(function(){
+							$('.content').addClass('slide-in').removeClass('slide-out');
+						}, 600);
+						$('.content').html(Mhash.canvas);
+						setTimeout(function(){
+							$('.content').removeClass('slide-in');
+							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
+								setTimeout(function(){
+									//$this.trigger('gameOver');
+								},2000);
+						}, 1250);
+						
+					})
+					
 					.on('click', '.medium', function(e){
 						console.log('Medium Mode has been Selected');
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
-							//$('.lock').css('display', 'none');
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(/*Mhash.canvas*/);
-							//$('#entropy').html('Entropy: ' + result.entropy);
-							//$('#score').html('Score: ' + result.score);
 						}, 600);
+						
+						var passField = "<div class='row top-space'></div>";
+						for(var i=1;i<=3;i++)
+							passField += "<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy" + i + "'></label><input type='password' class='form-control center-block' id='easy" + i + "' placeholder='Password #" + i + "'></div></div>";
+						passField += "<div class='row'><button type='submit' class='submit btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>";
+						$('.content').html($.parseHTML(passField));
+
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
@@ -452,12 +496,15 @@
 						console.log('Hard Mode has been Selected');
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
-							//$('.lock').css('display', 'none');
 							$('.content').addClass('slide-in').removeClass('slide-out');
-							$('.content').html(/*Mhash.canvas*/);
-							//$('#entropy').html('Entropy: ' + result.entropy);
-							//$('#score').html('Score: ' + result.score);
 						}, 600);
+						
+						var passField = "<div class='row top-space'></div>";
+						for(var i=1;i<=1;i++)
+							passField += "<div class='row'><div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><label class='sr-only' for='easy" + i + "'></label><input type='password' class='form-control center-block' id='easy" + i + "' placeholder='Password #" + i + "'></div></div>";
+						passField += "<div class='row'><button type='submit' class='submit btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>";
+						$('.content').html($.parseHTML(passField));
+
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
 							console.log('width: ' + $('.content').innerWidth() + ", height: " + $('.content').innerHeight());
