@@ -679,8 +679,11 @@
 								var passField = "<div class='title'><h4>So you think you're secure? Suppose we have a similar situation. How many strong passwords can you think of?</h4><h5>Note: We do not send any passwords from the computer.</h5></div><div class='row top-space'></div>";
 								for(var i=1;i<=num_fields;i++)
 									passField += "<div class='row'>" + icons[difficulty*5 + i-1] + "<div class='form-group has-success has-feedback col-md-4 col-md-offset-4'><input type='password' class='form-control param center-block' id='password" + i + "' placeholder='Password #" + i + "'></div></div>";
-								$("#params").append($.parseHTML(passField));
-								$("#params").append(Mhash.begin);
+								passField += "<button type='submit' class='begin btn btn-success btn-lg padding-top clearfix center-block'>Submit</button>";
+								//$('.content').html(passField);
+								$('#params').html(passField);
+								//$("#params").append($.parseHTML(passField));
+								//$("#params").append(Mhash.begin);
 						}, 800);
 						setTimeout(function(){
 							$('.content').removeClass('slide-in');
