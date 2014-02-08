@@ -209,7 +209,7 @@
 					        var randomVelocity =  5;
 					        var particleAngle = angle;
 
-					        bullets[100-count-1] = new Bullet(
+					        enemies[i].bullets[100-count-1] = new Bullet(
 					            {x:enemies[i].pos.x+100, y:enemies[i].pos.y+200}, null,
 					            {
 					            x: Math.cos(particleAngle) * randomVelocity,
@@ -451,7 +451,9 @@
 						
 					})
 					.on('click', '.difficulty', function(e){
-						difficulty = $(e.target).data('difficulty');
+						e.preventDefault();
+						difficulty = parseInt($(e.target).data('difficulty'));
+						console.log(difficulty);
 						var num_fields = 0;
 						$('.content').addClass('slide-out');
 						setTimeout(function(){	
@@ -470,8 +472,9 @@
 								default:
 									break;
 							}	
+								var params = document.getElementById('params');
 								for(var i = 0; i < num_fields; i++){
-									$('#params').append(Mhash.pwfield);
+									$('#params').append($(Mhash.pwfield));
 								}
 								$("#params").append(Mhash.begin);
 						}, 800);
