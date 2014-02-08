@@ -267,13 +267,21 @@
 				    run();
 				};
 
-
+				var updateBullets = function(){
+					for(var i = 0; i < 3; i++){
+						var current = enemies[i];
+						for(var j = 0; j < current.bullets.length; j++){
+							current.bullets[j].move();
+						}
+					}
+				};
 				var drawBullets = function(){
-					for (var i = 0; i < particles.length; i++) {
-			            context.fillStyle = particles[i].color;
-			            var position = particles[i].pos;
-			            context.fillRect(position.x, position.y, 4, 4);
-			        }
+					for(var i = 0; i < 3; i++){
+						var current = enemies[i];
+						for(var j = 0; j < current.bullets.length; j++){
+							current.bullets[j].move();
+						}
+					}
 				};
 
 				var run = function(){
@@ -306,13 +314,7 @@
 			    var update = function() {
 			        //define position updating logic here
 			        
-			        //update enemy weapon particle position
-			        for(var i = 0; i < 3; i++){
-			        	var current = enemies[i];
-			        	for (var j = 0; j < current.bullets.length; j++){
-
-			        	}
-			        }
+			        updateBullets();
 			        //update target health
 
 			        //generate random events? 
@@ -372,6 +374,7 @@
 						enemy.src = enemies[i].img;
 						context.drawImage(enemy, enemies[i].pos.x, enemies[i].pos.y, 200, 200);
 				    }
+				    drawBullets();
 					console.log('animating');
 
 
