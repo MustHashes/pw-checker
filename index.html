@@ -417,6 +417,7 @@
 
 					})
 					.on('click', '.start', function(e){
+						e.preventDefault();
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.lock').css('display', 'none');
@@ -433,9 +434,11 @@
 						}, 1250);
 					})
 					.on('click', '.rules', function(e){
+						e.preventDefault();
 						$('#rulesModal').modal()
 					})
 					.on('click', '.begin', function(e){
+						e.preventDefault();
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
@@ -477,6 +480,7 @@
 						}, 1250);
 					})
 					.on('gameOver', function(e){
+						e.preventDefault();
 						$('.content').addClass('slide-out');
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
