@@ -496,7 +496,7 @@
 									results.push(zxcvbn(pwords[j]));
 								}
 								console.log(results);
-								Mhash.dys.init();
+								Mhash.dys.init(results);
 							}, 800);
 							setTimeout(function(){
 								$('.content').removeClass('slide-in');
