@@ -92,7 +92,6 @@
 
 			var Mhash = {};
 			Mhash.Enemy = function(pos, img){
-				this.bullets = [];
 
 				this.pos = {};
 				this.pos.x = pos.x || 0;
@@ -170,6 +169,7 @@
 				$container,
 				enemies = [],
 				targets = [],
+				bullets = [],
 				imgs = [
 				'/img/icons/no border/facebook500.png',
 				'/img/icons/no border/googleplus-revised.png',
@@ -201,21 +201,6 @@
 				    		temp.x = 300 + (300 * i);
 							temp.y = 100;
 				    	enemies[i] = new Mhash.Enemy(temp, e_img);
-				    	
-					    var count = 100;
-					    var angle = (Math.PI) / count;
-
-					    while(count--) {
-					        var randomVelocity =  5;
-					        var particleAngle = angle;
-
-					        enemies[i].bullets[100-count-1] = new Bullet(
-					            {x:enemies[i].pos.x+100, y:enemies[i].pos.y+200}, null,
-					            {
-					            x: Math.cos(particleAngle) * randomVelocity,
-					            y: Math.sin(particleAngle) * randomVelocity
-					            }, false);
-						}
 					}
 
 				    forts = [];
@@ -270,26 +255,39 @@
 				};
 
 				var updateBullets = function(){
-					for(var i = 0; i < 3; i++){
-						var current = enemies[i];
-						for(var j = 0; j < current.bullets.length; j++){
-							current.bullets[j].move();
-						}
+					var i = parseInt(Math.random() * 3);
+					console.log(i);
+					console.log(enemies + ", " + this.enemies);
+					var position = {
+						x: enemies[i].pos.x + 100,
+						y: enemies[i].pos.y + 150
+					};
+
+					 var angle = (parseInt(Math.random() * 2)+1) * (Math.PI);
+				     var randomVelocity =  (Math.random() * 5) + 1;
+				     var particleAngle = angle;
+					 var newBullet = new Mhash.Bullet(position, null, {
+			            x: Math.cos(particleAngle) * randomVelocity,
+			            y: Math.sin(particleAngle) * randomVelocity
+			        }, true);
+
+					bullets.push(newBullet);
+					for (var j = 0; j < bullets.length; j++){
+						bullets[j].move();
 					}
 				};
 				var drawBullets = function(){
-					for(var i = 0; i < 3; i++){
-						var current = enemies[i];
-						for(var j = 0; j < current.bullets.length; j++){
-							current.bullets[j].move();
-						}
-					}
+					for (var i = 0; i < bullets.length; i++) {
+			            context.fillStyle = '#fff';
+			            var position = bullets[i].pos;
+			            context.fillRect(position.x, position.y, 4, 4);
+			        }
 				};
 
 				var run = function(){
 					//Replace this if with your halt condition
 					//This can be replaced with a "while(true)", but this will have serious performance implications
-					
+					console.log(enemies);
 					if(!defaults.isGameOver)
 					{       
 					  //Private animation loop functions
@@ -377,10 +375,10 @@
 						context.drawImage(enemy, enemies[i].pos.x, enemies[i].pos.y, 200, 200);
 				    }
 				    drawBullets();
-					console.log('animating');
 
 
 				};
+
 
 				var clear = function(){
 					canvas.width = canvas.width;
@@ -443,6 +441,7 @@
 						setTimeout(function(){
 							$('.content').addClass('slide-in').removeClass('slide-out');
 							$('.content').html(Mhash.canvas);
+							console.log('hi');
 							Mhash.dys.init();
 						}, 800);
 						setTimeout(function(){
