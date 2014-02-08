@@ -118,6 +118,8 @@
 				this.color.b = 39;
 				this.color.a = 1;
 
+				this.password = password || '';
+
 			};
 			Mhash.Fort.prototype.score = function(){
 				this.current_health = this.current_health - Math.pow(2, this.count);
@@ -143,6 +145,11 @@
 					this.color.a = .05;
 				}
 
+			}
+			Mhash.Fort.prototype.promptScore = function(bool){
+				if(!bool){
+					this.current_health = this.current_health / 2;
+				}
 			}
 			Mhash.Bullet = function(pos, target, vel, usePhysics) {
 				  // properties for animation
@@ -256,19 +263,19 @@
 				    	//(180+(260*i), 750, 180, 0, Math.PI*2, true);
 				    switch(num_forts){
 				    	case 5:
-				    		forts[0] = new Mhash.Fort(pos={x: 180, y:750}, 100, results[0].crack_time);
-				    		forts[1] = new Mhash.Fort(pos={x: 440, y:750}, 100, results[1].crack_time);
-				    		forts[2] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[2].crack_time);
-				    		forts[3] = new Mhash.Fort(pos={x: 960, y:750}, 100, results[3].crack_time);
-				    		forts[4] = new Mhash.Fort(pos={x: 1220, y:750}, 100, results[4].crack_time);
+				    		forts[0] = new Mhash.Fort(pos={x: 180, y:750}, 100, results[0].crack_time, pwds[0]);
+				    		forts[1] = new Mhash.Fort(pos={x: 440, y:750}, 100, results[1].crack_time, pwds[1]);
+				    		forts[2] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[2].crack_time, pwds[2]);
+				    		forts[3] = new Mhash.Fort(pos={x: 960, y:750}, 100, results[3].crack_time, pwds[3]);
+				    		forts[4] = new Mhash.Fort(pos={x: 1220, y:750}, 100, results[4].crack_time, pwds[4]);
 				    		break;
 				    	case 3:
-				    		forts[0] = new Mhash.Fort(pos={x: 270, y:850}, 300, results[0].crack_time);
-				    		forts[1] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[1].crack_time);
-				    		forts[2] = new Mhash.Fort(pos={x: 1120, y:850}, 300, results[2].crack_time);
+				    		forts[0] = new Mhash.Fort(pos={x: 270, y:850}, 300, results[0].crack_time, pwds[0]);
+				    		forts[1] = new Mhash.Fort(pos={x: 700, y:750}, 100, results[1].crack_time, pwds[1]);
+				    		forts[2] = new Mhash.Fort(pos={x: 1120, y:850}, 300, results[2].crack_time, pwds[2]);
 				    		break;
 				    	case 1:
-				    		forts[0] = new Mhash.Fort(pos={x: 700, y:750}, 700, results[0].crack_time);
+				    		forts[0] = new Mhash.Fort(pos={x: 700, y:750}, 700, results[0].crack_time, pwds[0]);
 				    		break;
 				    	default:
 				    		break;
